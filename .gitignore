@@ -5,6 +5,7 @@
 *.userosscache
 *.sln.docstates
 .vs/
+appsettings.json
 
 # Ignore bin and obj folders
 **/bin/*
