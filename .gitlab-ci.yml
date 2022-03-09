@@ -17,7 +17,7 @@ variables:
   DOCKER_TLS_CERTDIR: "/certs/client"
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
-  DEPLOYMENT_AUTH_HEADER: "Authorization: Basic ${DEPLOYMENT_AUTH_ISAK}"#${DEPLOYMENT_AUTH}"
+  DEPLOYMENT_AUTH_HEADER: "Authorization: Basic ${DEPLOYMENT_AUTH}"
 
 stages:
   - build
@@ -42,5 +42,5 @@ trigger_azure:
   script:
     # Don't forget to escape special characters (i.e. '\$') in your ENV variable
     # See https://stackoverflow.com/questions/46766903/how-to-trigger-manually-container-refresh/46769983#46769983
-    - curl --fail -X POST -d "" -H "$DEPLOYMENT_AUTH_HEADER" $DEPLOYMENT_WEBHOOK_ISAK #$DEPLOYMENT_WEBHOOK
+    - curl --fail -X POST -d "" -H "$DEPLOYMENT_AUTH_HEADER" $DEPLOYMENT_WEBHOOK
     # This will produce a non-zero exit code if the request fails
