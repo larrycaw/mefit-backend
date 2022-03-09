@@ -18,7 +18,7 @@ TODO: Write more about what the database contains (tables) and the relationships
 
  - Clone to a local directory
 ```bash
-    git clone https://github.com/StianOkland/MovieCharacterAPI.git
+    git clone https://gitlab.com/g5453/backend.git
 ```
  - Open solution in Visual Studio or another IDE
  - Update to your SQL Server connection info in appsettings.json
