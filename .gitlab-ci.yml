@@ -39,7 +39,6 @@ build:
 trigger_azure:
   stage: deploy
   image: curlimages/curl:latest
-  when: manual
   script:
     # Don't forget to escape special characters (i.e. '\$') in your ENV variable
     # See https://stackoverflow.com/questions/46766903/how-to-trigger-manually-container-refresh/46769983#46769983
