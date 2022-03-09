@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace azuretest.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "FREEZING", "BRACING", "CHILLY", "COOL", "MILD", "WARM", "BALMY", "HOT", "SWELTERING", "SCORCHING"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
