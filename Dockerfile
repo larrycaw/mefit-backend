@@ -4,10 +4,6 @@ EXPOSE 80
 EXPOSE 443
 WORKDIR /app
 
-# Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_12.x |  bash -
-RUN apt-get install -y nodejs
-
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
 RUN dotnet restore
