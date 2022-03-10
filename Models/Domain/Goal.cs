@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MeFit.Models.Domain
@@ -10,5 +11,6 @@ namespace MeFit.Models.Domain
         public bool Achieved { get; set; }
         public int ProgramId { get; set; }
         public MFProgram Program { get; set; }
+        public ICollection<Workout> Workouts { get; set; }
     }
 }

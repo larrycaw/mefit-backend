@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MeFit.Models.Domain
 {
@@ -8,5 +9,6 @@ namespace MeFit.Models.Domain
         public int ExerciseRepetitions { get; set; }
         public int ExerciseId { get; set; }
         public Exercise Exercise { get; set; }
+        public ICollection<Workout> Workouts { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using MeFit.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MeFit.Migrations
 {
     [DbContext(typeof(MeFitDbContext))]
-    partial class MeFitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220310130424_SeedAndLink")]
+    partial class SeedAndLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
