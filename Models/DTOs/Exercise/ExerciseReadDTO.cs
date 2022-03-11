@@ -2,7 +2,7 @@
 
 namespace MeFit.Models.DTOs.Exercise
 {
-    public class ExerciseDTO
+    public class ExerciseReadDTO
     {
         [MaxLength(100)]
         public string Name { get; set; }

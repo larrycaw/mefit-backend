@@ -8,7 +8,9 @@ namespace MeFit.Profiles
     {
         public ExerciseProfile()
         {
-            CreateMap<models.Exercise, ExerciseDTO>().ReverseMap();
+            CreateMap<models.Exercise, ExerciseReadDTO>().ReverseMap();
+            CreateMap<models.Exercise, ExerciseUpdateDTO>().ReverseMap();
+            CreateMap<models.Exercise, ExerciseCreateDTO>().ReverseMap();
         }
     }
 }

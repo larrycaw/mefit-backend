@@ -27,17 +27,17 @@ namespace MeFit.Controllers
 
         // GET: api/Exercises/all
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<ExerciseDTO>>> GetExercises()
+        public async Task<ActionResult<IEnumerable<ExerciseReadDTO>>> GetExercises()
         {
-            var exercises = _mapper.Map<List<ExerciseDTO>>(await _context.Exercises.ToListAsync());
+            var exercises = _mapper.Map<List<ExerciseReadDTO>>(await _context.Exercises.ToListAsync());
             return Ok(exercises);
         }
 
         // GET: api/Exercises
         [HttpGet]
-        public async Task<ActionResult<ExerciseDTO>> GetExercise([FromHeader(Name = "id")] int id)
+        public async Task<ActionResult<ExerciseReadDTO>> GetExercise([FromHeader(Name = "id")] int id)
         {
-            var exercise = _mapper.Map<ExerciseDTO>(await _context.Exercises.FindAsync(id));
+            var exercise = _mapper.Map<ExerciseReadDTO>(await _context.Exercises.FindAsync(id));
 
             if (exercise == null)
             {
@@ -50,12 +50,13 @@ namespace MeFit.Controllers
         //PUT: api/Exercises
 
         [HttpPut]
-        public async Task<IActionResult> UpdateExercise([FromBody] Exercise exercise, [FromHeader(Name = "id")] int id)
+        public async Task<IActionResult> UpdateExercise([FromBody] ExerciseUpdateDTO exercise, [FromHeader(Name = "id")] int id)
         {
             if (exercise.Id != id)
                 return BadRequest();
 
-            _context.Entry(exercise).State = EntityState.Modified;
+            Exercise domainExercise = _mapper.Map<Exercise>(exercise);
+            _context.Entry(domainExercise).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +79,7 @@ namespace MeFit.Controllers
 
         // POST: api/Exercises
         [HttpPost]
-        public async Task<ActionResult<ExerciseDTO>> PostExercise([FromBody] ExerciseDTO exerciseDto)
+        public async Task<ActionResult<ExerciseReadDTO>> PostExercise([FromBody] ExerciseCreateDTO exerciseDto)
         {
             var exercise = _mapper.Map<Exercise>(exerciseDto);
 
@@ -92,7 +93,7 @@ namespace MeFit.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            var addedExercise = _mapper.Map<ExerciseDTO>(exercise);
+            var addedExercise = _mapper.Map<ExerciseReadDTO>(exercise);
             return CreatedAtAction("GetExercise", new { Id = exercise.Id }, addedExercise);
         }
 
