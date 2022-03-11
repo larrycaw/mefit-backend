@@ -4,14 +4,16 @@ using MeFit.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MeFit.Migrations
 {
     [DbContext(typeof(MeFitDbContext))]
-    partial class MeFitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220311084302_UpdateGoalAndProfile")]
+    partial class UpdateGoalAndProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,18 +60,12 @@ namespace MeFit.Migrations
                         new
                         {
                             Id = 1,
-                            AddressLine1 = "Hans Nielsen Hauges Gate 10",
-                            City = "Trondheim",
-                            Contry = "Norway",
-                            PostalCode = "7067"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddressLine1 = "Høgreina 18c",
-                            City = "Trondheim",
-                            Contry = "Norway",
-                            PostalCode = "7079"
+                            AddressLine1 = "eef",
+                            AddressLine2 = "fkr",
+                            AddressLine3 = "efe",
+                            City = "jfr",
+                            Contry = "fw4w",
+                            PostalCode = "1123"
                         });
                 });
 
@@ -113,33 +109,6 @@ namespace MeFit.Migrations
                             Name = "Barbell curl",
                             TargetMuscleGroup = "biceps",
                             VideoURL = ".mov"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Legs strong",
-                            ImageURL = "img",
-                            Name = "Leg press",
-                            TargetMuscleGroup = "legs",
-                            VideoURL = ".mov"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Chest strong",
-                            ImageURL = "img",
-                            Name = "Push up",
-                            TargetMuscleGroup = "upper body",
-                            VideoURL = ".mov"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Biceps strong",
-                            ImageURL = "img",
-                            Name = "Isolation curl",
-                            TargetMuscleGroup = "biceps",
-                            VideoURL = ".mov"
                         });
                 });
 
@@ -162,6 +131,9 @@ namespace MeFit.Migrations
                     b.Property<int>("ProgramId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Userid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProfileId");
@@ -175,25 +147,9 @@ namespace MeFit.Migrations
                         {
                             Id = 1,
                             Achieved = false,
-                            ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 269, DateTimeKind.Local).AddTicks(4592),
-                            ProgramId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Achieved = true,
-                            ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 277, DateTimeKind.Local).AddTicks(5592),
-                            ProgramId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Achieved = true,
-                            ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 277, DateTimeKind.Local).AddTicks(5732),
-                            ProgramId = 2
+                            ProgramEndDate = new DateTime(2022, 3, 11, 9, 43, 0, 861, DateTimeKind.Local).AddTicks(2532),
+                            ProgramId = 1,
+                            Userid = "keycloak-uid"
                         });
                 });
 
@@ -222,18 +178,6 @@ namespace MeFit.Migrations
                             Id = 1,
                             Category = "Upper body",
                             Name = "Bicep enhancement"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Category = "Whole body",
-                            Name = "Strength building"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = "Whole body",
-                            Name = "Cardio"
                         });
                 });
 
@@ -320,12 +264,6 @@ namespace MeFit.Migrations
                             Id = 1,
                             ExerciseId = 1,
                             ExerciseRepetitions = 10
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ExerciseId = 2,
-                            ExerciseRepetitions = 20
                         });
                 });
 
@@ -358,20 +296,6 @@ namespace MeFit.Migrations
                             Complete = false,
                             Name = "Arm day",
                             Type = "Strength"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Complete = true,
-                            Name = "Leg day",
-                            Type = "Strength"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Complete = false,
-                            Name = "Running",
-                            Type = "Cardio"
                         });
                 });
 
@@ -394,11 +318,6 @@ namespace MeFit.Migrations
                         {
                             GoalId = 1,
                             WorkoutId = 1
-                        },
-                        new
-                        {
-                            GoalId = 2,
-                            WorkoutId = 2
                         });
                 });
 
@@ -421,21 +340,6 @@ namespace MeFit.Migrations
                         {
                             ProgramId = 1,
                             WorkoutId = 1
-                        },
-                        new
-                        {
-                            ProgramId = 2,
-                            WorkoutId = 1
-                        },
-                        new
-                        {
-                            ProgramId = 2,
-                            WorkoutId = 2
-                        },
-                        new
-                        {
-                            ProgramId = 3,
-                            WorkoutId = 3
                         });
                 });
 
@@ -458,16 +362,6 @@ namespace MeFit.Migrations
                         {
                             SetId = 1,
                             WorkoutId = 1
-                        },
-                        new
-                        {
-                            SetId = 2,
-                            WorkoutId = 1
-                        },
-                        new
-                        {
-                            SetId = 1,
-                            WorkoutId = 2
                         });
                 });
 

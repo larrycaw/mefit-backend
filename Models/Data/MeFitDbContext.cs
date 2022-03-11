@@ -32,11 +32,48 @@ namespace MeFit.Models.Data
                 TargetMuscleGroup = "biceps"
             });
 
+            modelBuilder.Entity<Exercise>().HasData(new Exercise
+            {
+                Id = 2,
+                Name = "Leg press",
+                Description = "Legs strong",
+                ImageURL = "img",
+                VideoURL = ".mov",
+                TargetMuscleGroup = "legs"
+            });
+
+            modelBuilder.Entity<Exercise>().HasData(new Exercise
+            {
+                Id = 3,
+                Name = "Push up",
+                Description = "Chest strong",
+                ImageURL = "img",
+                VideoURL = ".mov",
+                TargetMuscleGroup = "upper body"
+            });
+
+            modelBuilder.Entity<Exercise>().HasData(new Exercise
+            {
+                Id = 4,
+                Name = "Isolation curl",
+                Description = "Biceps strong",
+                ImageURL = "img",
+                VideoURL = ".mov",
+                TargetMuscleGroup = "biceps"
+            });
+
             modelBuilder.Entity<Set>().HasData(new Set
             {
                 Id = 1,
                 ExerciseRepetitions = 10,
                 ExerciseId = 1
+            });
+
+            modelBuilder.Entity<Set>().HasData(new Set
+            {
+                Id = 2,
+                ExerciseRepetitions = 20,
+                ExerciseId = 2
             });
 
             modelBuilder.Entity<Workout>().HasData(new Workout
@@ -47,6 +84,22 @@ namespace MeFit.Models.Data
                 Complete = false
             });
 
+            modelBuilder.Entity<Workout>().HasData(new Workout
+            {
+                Id = 2,
+                Name = "Leg day",
+                Type = "Strength",
+                Complete = true
+            });
+
+            modelBuilder.Entity<Workout>().HasData(new Workout
+            {
+                Id = 3,
+                Name = "Running",
+                Type = "Cardio",
+                Complete = false
+            });
+
             modelBuilder.Entity<MFProgram>().HasData(new MFProgram
             {
                 Id = 1,
@@ -54,18 +107,50 @@ namespace MeFit.Models.Data
                 Category = "Upper body"
             });
 
+            modelBuilder.Entity<MFProgram>().HasData(new MFProgram
+            {
+                Id = 2,
+                Name = "Strength building",
+                Category = "Whole body"
+            });
+
+            modelBuilder.Entity<MFProgram>().HasData(new MFProgram
+            {
+                Id = 3,
+                Name = "Cardio",
+                Category = "Whole body"
+            });
+
             modelBuilder.Entity<Goal>().HasData(new Goal
             {
                 Id = 1,
+                ProfileId = "keycloak-uid",
                 ProgramEndDate = DateTime.Now,
                 Achieved = false,
                 ProgramId = 1
             });
 
+            modelBuilder.Entity<Goal>().HasData(new Goal
+            {
+                Id = 2,
+                ProfileId = "keycloak-uid",
+                ProgramEndDate = DateTime.Now,
+                Achieved = true,
+                ProgramId = 2
+            });
+
+            modelBuilder.Entity<Goal>().HasData(new Goal
+            {
+                Id = 3,
+                ProfileId = "keycloak-uid",
+                ProgramEndDate = DateTime.Now,
+                Achieved = true,
+                ProgramId = 2
+            });
+
             modelBuilder.Entity<Profile>().HasData(new Profile
             {
                 Id = "keycloak-uid",
-                GoalId = 1,
                 AddressId = 1,
                 ProgramId = 1,
                 WorkoutId = 1,
@@ -79,12 +164,23 @@ namespace MeFit.Models.Data
             modelBuilder.Entity<Address>().HasData(new Address
             {
                 Id = 1,
-                AddressLine1 = "eef",
-                AddressLine2 = "fkr",
-                AddressLine3 = "efe",
-                City =  "jfr",
-                PostalCode = "1123",
-                Contry = "fw4w"
+                AddressLine1 = "Hans Nielsen Hauges Gate 10",
+                AddressLine2 = null,
+                AddressLine3 = null,
+                City =  "Trondheim",
+                PostalCode = "7067",
+                Contry = "Norway"
+            });
+
+            modelBuilder.Entity<Address>().HasData(new Address
+            {
+                Id = 2,
+                AddressLine1 = "Høgreina 18c",
+                AddressLine2 = null,
+                AddressLine3 = null,
+                City = "Trondheim",
+                PostalCode = "7079",
+                Contry = "Norway"
             });
 
             modelBuilder.Entity<Workout>()
@@ -98,7 +194,9 @@ namespace MeFit.Models.Data
                     {
                         je.HasKey("SetId", "WorkoutId");
                         je.HasData(
-                            new { WorkoutId = 1, SetId = 1 }
+                            new { WorkoutId = 1, SetId = 1 },
+                            new { WorkoutId = 1, SetId = 2 },
+                            new { WorkoutId = 2, SetId = 1 }
                         );
                     });
 
@@ -113,7 +211,8 @@ namespace MeFit.Models.Data
                     {
                         je.HasKey("GoalId", "WorkoutId");
                         je.HasData(
-                            new { WorkoutId = 1, GoalId = 1, WorkoutEndDate = DateTime.Now }
+                            new { WorkoutId = 1, GoalId = 1 },
+                            new { WorkoutId = 2, GoalId = 2 }
                         );
                     });
 
@@ -128,7 +227,10 @@ namespace MeFit.Models.Data
                     {
                         je.HasKey("ProgramId", "WorkoutId");
                         je.HasData(
-                            new { WorkoutId = 1, ProgramId = 1 }
+                            new { WorkoutId = 1, ProgramId = 1 },
+                            new { WorkoutId = 1, ProgramId = 2 },
+                            new { WorkoutId = 2, ProgramId = 2 },
+                            new { WorkoutId = 3, ProgramId = 3 }
                         );
                     });
         }
