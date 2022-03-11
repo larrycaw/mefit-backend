@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using MeFit.Models.DTOs.Goal;
+using System.Linq;
+using models = MeFit.Models.Domain;
 
 namespace MeFit.Profiles
 {
@@ -6,7 +9,15 @@ namespace MeFit.Profiles
     {
         public GoalProfile()
         {
-            //TODO: map goal
+            CreateMap<models.Goal, GoalDTO>()
+                .ForMember(gdto => gdto.Workouts, opt =>
+                opt.MapFrom(g => g.Workouts.Select(w => w.Id).ToArray()))
+                .ReverseMap();
+
+            CreateMap<models.Goal, GoalByUserDTO>()
+                .ForMember(gdto => gdto.Workouts, opt =>
+                opt.MapFrom(g => g.Workouts.Select(w => w.Id).ToArray()))
+                .ReverseMap();
         }
     }
 }

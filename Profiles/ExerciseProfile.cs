@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using models = MeFit.Models.Domain;
+using MeFit.Models.DTOs.Exercise;
 
 namespace MeFit.Profiles
 {
@@ -6,7 +8,7 @@ namespace MeFit.Profiles
     {
         public ExerciseProfile()
         {
-            //TODO: map exercise
+            CreateMap<models.Exercise, ExerciseDTO>().ReverseMap();
         }
     }
 }
