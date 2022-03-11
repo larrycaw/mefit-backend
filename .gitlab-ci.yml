@@ -35,6 +35,8 @@ build:
     - docker build -t $CONTAINER_TEST_IMAGE .
     - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
     - docker push $CI_REGISTRY_IMAGE
+  only:
+      - main
 
 trigger_azure:
   stage: deploy
