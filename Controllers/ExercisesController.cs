@@ -25,7 +25,12 @@ namespace MeFit.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Exercises/all
+        /// <summary>
+        /// Gets all exercises
+        /// 
+        /// GET: api/Exercises/all
+        /// </summary>
+        /// <returns>List of exercises</returns>
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<ExerciseReadDTO>>> GetExercises()
         {
@@ -33,7 +38,13 @@ namespace MeFit.Controllers
             return Ok(exercises);
         }
 
-        // GET: api/Exercises
+        /// <summary>
+        /// Gets exercise given exercise ID
+        /// 
+        /// GET: api/Exercises
+        /// </summary>
+        /// <param name="id">Exercise ID</param>
+        /// <returns>Exercise</returns>
         [HttpGet]
         public async Task<ActionResult<ExerciseReadDTO>> GetExercise([FromHeader(Name = "id")] int id)
         {
@@ -47,7 +58,14 @@ namespace MeFit.Controllers
             return Ok(exercise);
         }
 
-        //PUT: api/Exercises
+        /// <summary>
+        /// Updates exercise
+        /// 
+        /// PUT: api/Exercises
+        /// </summary>
+        /// <param name="exercise">Exercise object</param>
+        /// <param name="id">Exercise ID</param>
+        /// <returns>HTTP response code</returns>
 
         [HttpPut]
         public async Task<IActionResult> UpdateExercise([FromBody] ExerciseUpdateDTO exercise, [FromHeader(Name = "id")] int id)
@@ -77,7 +95,13 @@ namespace MeFit.Controllers
             return NoContent();
         }
 
-        // POST: api/Exercises
+        /// <summary>
+        /// Posts exercise
+        /// 
+        /// POST: api/Exercises
+        /// </summary>
+        /// <param name="exerciseDto">Exercise to post</param>
+        /// <returns>Newly created exercise</returns>
         [HttpPost]
         public async Task<ActionResult<ExerciseReadDTO>> PostExercise([FromBody] ExerciseCreateDTO exerciseDto)
         {
@@ -97,7 +121,13 @@ namespace MeFit.Controllers
             return CreatedAtAction("GetExercise", new { Id = exercise.Id }, addedExercise);
         }
 
-        // DELETE: api/Exercises/delete
+        /// <summary>
+        /// Deletes exercise
+        /// 
+        /// DELETE: api/Exercises/delete
+        /// </summary>
+        /// <param name="id">Exercise ID</param>
+        /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteExercise([FromHeader(Name = "id")] int id)
         {

@@ -26,7 +26,12 @@ namespace MeFit.Controllers
 
          }
 
-        // GET: api/Goals/all
+        /// <summary>
+        /// Gets all goals, regardless of which user it belongs to
+        /// 
+        /// GET: api/Goals/all
+        /// </summary>
+        /// <returns>List of goals</returns>
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<GoalReadDTO>>> GetGoals()
         {
@@ -34,7 +39,13 @@ namespace MeFit.Controllers
             return Ok(goals);
         }
 
-        // GET: api/Goals
+        /// <summary>
+        /// Gets goal given goal ID
+        /// 
+        /// GET: api/Goals
+        /// </summary>
+        /// <param name="id">Goal ID</param>
+        /// <returns>Goal</returns>
         [HttpGet]
         public async Task<ActionResult<GoalReadDTO>> GetGoal([FromHeader(Name = "id")] int id)
         {
@@ -48,15 +59,27 @@ namespace MeFit.Controllers
             return Ok(goal);
         }
 
-        // GET: api/UserGoal
-        [HttpGet("userGoal")]
+        /// <summary>
+        /// Gets all goals of a user
+        /// 
+        /// GET: api/Goals/user
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <returns>List of goals</returns>
+        [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<GoalByUserDTO>>> GetUserGoals([FromHeader(Name = "userId")] string userId)
         {
             var goals = _mapper.Map<List<GoalByUserDTO>>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == userId).ToListAsync());
             return Ok(goals);
         }
 
-        // GET: api/CurrentGoal
+        /// <summary>
+        /// Gets user's current unfinished goal
+        /// 
+        /// GET: api/Goals/CurrentGoal
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <returns>Current goal</returns>
         [HttpGet("currentGoal")]
         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
         {
@@ -69,7 +92,13 @@ namespace MeFit.Controllers
         }
 
 
-        // DELETE: api/Goals/delete
+        /// <summary>
+        /// Deletes goal given goal ID
+        /// 
+        /// DELETE: api/Goals/delete
+        /// </summary>
+        /// <param name="id">Goal ID</param>
+        /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteGoal([FromHeader(Name = "id")] int id)
         {
