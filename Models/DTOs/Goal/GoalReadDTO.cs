@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MeFit.Models.DTOs.Goal
 {
-    public class GoalDTO
+    public class GoalReadDTO
     {
         public DateTime ProgramEndDate { get; set; }
         public bool Achieved { get; set; }
