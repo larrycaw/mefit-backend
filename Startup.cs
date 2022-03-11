@@ -52,6 +52,8 @@ namespace MeFit
 
             }
 
+            services.AddAutoMapper(typeof(Startup));
+
             //services.AddDefaultIdentity<MeFitDbContext>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<MeFitDbContext>();
 

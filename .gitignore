@@ -11,3 +11,4 @@
 **/obj/*
 
 appsettings.Development.json
+**.idea/*
