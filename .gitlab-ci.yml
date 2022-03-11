@@ -44,3 +44,5 @@ trigger_azure:
     # See https://stackoverflow.com/questions/46766903/how-to-trigger-manually-container-refresh/46769983#46769983
     - curl --fail -X POST -d "" -H "$DEPLOYMENT_AUTH_HEADER" $DEPLOYMENT_WEBHOOK
     # This will produce a non-zero exit code if the request fails
+  only:
+      - main
