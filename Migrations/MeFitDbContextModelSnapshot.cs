@@ -159,7 +159,7 @@ namespace MeFit.Migrations
                     b.Property<DateTime>("ProgramEndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProgramId")
+                    b.Property<int?>("ProgramId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -176,7 +176,7 @@ namespace MeFit.Migrations
                             Id = 1,
                             Achieved = false,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 269, DateTimeKind.Local).AddTicks(4592),
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 147, DateTimeKind.Local).AddTicks(2507),
                             ProgramId = 1
                         },
                         new
@@ -184,7 +184,7 @@ namespace MeFit.Migrations
                             Id = 2,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 277, DateTimeKind.Local).AddTicks(5592),
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3317),
                             ProgramId = 2
                         },
                         new
@@ -192,7 +192,7 @@ namespace MeFit.Migrations
                             Id = 3,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 11, 10, 24, 3, 277, DateTimeKind.Local).AddTicks(5732),
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3372),
                             ProgramId = 2
                         });
                 });
@@ -242,30 +242,30 @@ namespace MeFit.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("Disabilities")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Height")
+                    b.Property<int?>("Height")
                         .HasColumnType("int");
 
                     b.Property<string>("MedicalConditions")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("ProgramId")
+                    b.Property<int?>("ProgramId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SetId")
+                    b.Property<int?>("SetId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Weight")
+                    b.Property<int?>("Weight")
                         .HasColumnType("int");
 
-                    b.Property<int>("WorkoutId")
+                    b.Property<int?>("WorkoutId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -302,7 +302,7 @@ namespace MeFit.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ExerciseId")
+                    b.Property<int?>("ExerciseId")
                         .HasColumnType("int");
 
                     b.Property<int>("ExerciseRepetitions")
@@ -479,9 +479,7 @@ namespace MeFit.Migrations
 
                     b.HasOne("MeFit.Models.Domain.MFProgram", "Program")
                         .WithMany()
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.Navigation("Profile");
 
@@ -492,27 +490,19 @@ namespace MeFit.Migrations
                 {
                     b.HasOne("MeFit.Models.Domain.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.HasOne("MeFit.Models.Domain.MFProgram", "Program")
                         .WithMany()
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.HasOne("MeFit.Models.Domain.Set", "Set")
                         .WithMany()
-                        .HasForeignKey("SetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SetId");
 
                     b.HasOne("MeFit.Models.Domain.Workout", "Workout")
                         .WithMany()
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WorkoutId");
 
                     b.Navigation("Address");
 
@@ -527,9 +517,7 @@ namespace MeFit.Migrations
                 {
                     b.HasOne("MeFit.Models.Domain.Exercise", "Exercise")
                         .WithMany()
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExerciseId");
 
                     b.Navigation("Exercise");
                 });

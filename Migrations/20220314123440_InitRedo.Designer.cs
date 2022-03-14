@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeFit.Migrations
 {
     [DbContext(typeof(MeFitDbContext))]
-    [Migration("20220311084302_UpdateGoalAndProfile")]
-    partial class UpdateGoalAndProfile
+    [Migration("20220314123440_InitRedo")]
+    partial class InitRedo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,12 +60,18 @@ namespace MeFit.Migrations
                         new
                         {
                             Id = 1,
-                            AddressLine1 = "eef",
-                            AddressLine2 = "fkr",
-                            AddressLine3 = "efe",
-                            City = "jfr",
-                            Contry = "fw4w",
-                            PostalCode = "1123"
+                            AddressLine1 = "Hans Nielsen Hauges Gate 10",
+                            City = "Trondheim",
+                            Contry = "Norway",
+                            PostalCode = "7067"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressLine1 = "Høgreina 18c",
+                            City = "Trondheim",
+                            Contry = "Norway",
+                            PostalCode = "7079"
                         });
                 });
 
@@ -109,6 +115,33 @@ namespace MeFit.Migrations
                             Name = "Barbell curl",
                             TargetMuscleGroup = "biceps",
                             VideoURL = ".mov"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Legs strong",
+                            ImageURL = "img",
+                            Name = "Leg press",
+                            TargetMuscleGroup = "legs",
+                            VideoURL = ".mov"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Chest strong",
+                            ImageURL = "img",
+                            Name = "Push up",
+                            TargetMuscleGroup = "upper body",
+                            VideoURL = ".mov"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Biceps strong",
+                            ImageURL = "img",
+                            Name = "Isolation curl",
+                            TargetMuscleGroup = "biceps",
+                            VideoURL = ".mov"
                         });
                 });
 
@@ -128,11 +161,8 @@ namespace MeFit.Migrations
                     b.Property<DateTime>("ProgramEndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProgramId")
+                    b.Property<int?>("ProgramId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Userid")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -147,9 +177,25 @@ namespace MeFit.Migrations
                         {
                             Id = 1,
                             Achieved = false,
-                            ProgramEndDate = new DateTime(2022, 3, 11, 9, 43, 0, 861, DateTimeKind.Local).AddTicks(2532),
-                            ProgramId = 1,
-                            Userid = "keycloak-uid"
+                            ProfileId = "keycloak-uid",
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 147, DateTimeKind.Local).AddTicks(2507),
+                            ProgramId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Achieved = true,
+                            ProfileId = "keycloak-uid",
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3317),
+                            ProgramId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Achieved = true,
+                            ProfileId = "keycloak-uid",
+                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3372),
+                            ProgramId = 2
                         });
                 });
 
@@ -178,6 +224,18 @@ namespace MeFit.Migrations
                             Id = 1,
                             Category = "Upper body",
                             Name = "Bicep enhancement"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Whole body",
+                            Name = "Strength building"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Whole body",
+                            Name = "Cardio"
                         });
                 });
 
@@ -186,30 +244,30 @@ namespace MeFit.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("Disabilities")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Height")
+                    b.Property<int?>("Height")
                         .HasColumnType("int");
 
                     b.Property<string>("MedicalConditions")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("ProgramId")
+                    b.Property<int?>("ProgramId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SetId")
+                    b.Property<int?>("SetId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Weight")
+                    b.Property<int?>("Weight")
                         .HasColumnType("int");
 
-                    b.Property<int>("WorkoutId")
+                    b.Property<int?>("WorkoutId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -246,7 +304,7 @@ namespace MeFit.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ExerciseId")
+                    b.Property<int?>("ExerciseId")
                         .HasColumnType("int");
 
                     b.Property<int>("ExerciseRepetitions")
@@ -264,6 +322,12 @@ namespace MeFit.Migrations
                             Id = 1,
                             ExerciseId = 1,
                             ExerciseRepetitions = 10
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ExerciseId = 2,
+                            ExerciseRepetitions = 20
                         });
                 });
 
@@ -296,6 +360,20 @@ namespace MeFit.Migrations
                             Complete = false,
                             Name = "Arm day",
                             Type = "Strength"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Complete = true,
+                            Name = "Leg day",
+                            Type = "Strength"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Complete = false,
+                            Name = "Running",
+                            Type = "Cardio"
                         });
                 });
 
@@ -318,6 +396,11 @@ namespace MeFit.Migrations
                         {
                             GoalId = 1,
                             WorkoutId = 1
+                        },
+                        new
+                        {
+                            GoalId = 2,
+                            WorkoutId = 2
                         });
                 });
 
@@ -340,6 +423,21 @@ namespace MeFit.Migrations
                         {
                             ProgramId = 1,
                             WorkoutId = 1
+                        },
+                        new
+                        {
+                            ProgramId = 2,
+                            WorkoutId = 1
+                        },
+                        new
+                        {
+                            ProgramId = 2,
+                            WorkoutId = 2
+                        },
+                        new
+                        {
+                            ProgramId = 3,
+                            WorkoutId = 3
                         });
                 });
 
@@ -362,6 +460,16 @@ namespace MeFit.Migrations
                         {
                             SetId = 1,
                             WorkoutId = 1
+                        },
+                        new
+                        {
+                            SetId = 2,
+                            WorkoutId = 1
+                        },
+                        new
+                        {
+                            SetId = 1,
+                            WorkoutId = 2
                         });
                 });
 
@@ -373,9 +481,7 @@ namespace MeFit.Migrations
 
                     b.HasOne("MeFit.Models.Domain.MFProgram", "Program")
                         .WithMany()
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.Navigation("Profile");
 
@@ -386,27 +492,19 @@ namespace MeFit.Migrations
                 {
                     b.HasOne("MeFit.Models.Domain.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.HasOne("MeFit.Models.Domain.MFProgram", "Program")
                         .WithMany()
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.HasOne("MeFit.Models.Domain.Set", "Set")
                         .WithMany()
-                        .HasForeignKey("SetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SetId");
 
                     b.HasOne("MeFit.Models.Domain.Workout", "Workout")
                         .WithMany()
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WorkoutId");
 
                     b.Navigation("Address");
 
@@ -421,9 +519,7 @@ namespace MeFit.Migrations
                 {
                     b.HasOne("MeFit.Models.Domain.Exercise", "Exercise")
                         .WithMany()
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExerciseId");
 
                     b.Navigation("Exercise");
                 });
