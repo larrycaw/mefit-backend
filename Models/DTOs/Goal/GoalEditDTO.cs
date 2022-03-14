@@ -7,7 +7,6 @@ namespace MeFit.Models.DTOs.Goal
         public int Id { get; set; }
         public DateTime ProgramEndDate { get; set; }
         public bool Achieved { get; set; }
-        public int ProgramId { get; set; }
         public string ProfileId { get; set; }
     }
 }

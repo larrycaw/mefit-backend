@@ -20,6 +20,7 @@ namespace MeFit.Profiles
                 .ReverseMap();
 
             CreateMap<models.Goal, GoalCreateDTO>().ReverseMap();
+            CreateMap<models.Goal, GoalEditDTO>().ReverseMap();
         }
     }
 }

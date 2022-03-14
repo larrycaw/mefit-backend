@@ -147,7 +147,7 @@ namespace MeFit.Controllers
         }
 
         /// <summary>
-        /// Assigns workouts to a goal
+        /// Assigns workouts to a goal. Overwrites current workouts assigned to goal
         /// </summary>
         /// <param name="Workouts">Workout IDs</param>
         /// <param name="goalId">Goal ID</param>
@@ -157,6 +157,11 @@ namespace MeFit.Controllers
         {
 
             var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
+
+            foreach(var workout in goal.Workouts)
+            {
+                goal.Workouts.Remove(workout);
+            }
 
             if (goal == null)
             {
@@ -170,8 +175,32 @@ namespace MeFit.Controllers
                 {
                     goal.Workouts.Add(tempWorkout);
                 }
-
             }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Assigns new program to goal
+        /// </summary>
+        /// <param name="programId">Program ID</param>
+        /// <param name="goalId">Goal ID</param>
+        /// <returns>HTTP request message</returns>
+        [HttpPut("assignProgram")]
+        public async Task<ActionResult> AssignProgramToGoal([FromBody] int programId, [FromHeader(Name = "GoalID")] int goalId)
+        {
+            var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
+
+            if (goal == null)
+            {
+                return NotFound();
+            }
+
+            var tempProgram = await _context.Programs.FirstOrDefaultAsync(p => p.Id == programId);
+
+            if (tempProgram != null)
+                goal.Program = tempProgram;
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -186,12 +215,12 @@ namespace MeFit.Controllers
         [HttpPut("updateGoal")]
         public async Task<IActionResult> UpdateGoal([FromBody] GoalEditDTO goalDto, [FromHeader(Name = "goalID")] int goalID)
         {
-            if (goalID != goalDto.Id || !ProgramExists(goalDto.ProgramId) || !ProfileExists(goalDto.ProfileId))
+            if (goalID != goalDto.Id || !ProfileExists(goalDto.ProfileId))
             {
                 return BadRequest();
             }
 
-            Goal domainGoal = _mapper.Map<Goal>(goalDto);
+            var domainGoal = _mapper.Map<Goal>(goalDto);
             _context.Entry(domainGoal).State = EntityState.Modified;
 
             try
