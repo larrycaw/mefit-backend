@@ -36,19 +36,18 @@ namespace MeFit.Controllers
         }
 
         // GET: api/Programs/5
-        [HttpGet("byId")]
-        public async Task<IActionResult> GetProgramById([FromBody] int id)
+        [HttpGet("ById")]
+        public async Task<ActionResult<ProgramReadDTO>> GetProgramById([FromHeader(Name = "id")] int id)
         {
-            var program = await _context.Programs.FindAsync(id);
+            var program = _mapper.Map<ProgramReadDTO>( await _context.Programs.Include(p => p.Workouts).Where(p => p.Id == id).FirstAsync());
 
             if (program == null)
             {
                 return NotFound();
             }
 
-            var programDto = _mapper.Map<ProgramReadDTO>(program);
 
-            return Ok(programDto);
+            return Ok(program);
         }
 
         // POST: api/Programs
@@ -56,7 +55,7 @@ namespace MeFit.Controllers
         [HttpPost]
         public async Task<ActionResult<MFProgram>> PostProgram([FromBody] ProgramCreateDTO programDto)
         {
- 
+
             var program = _mapper.Map<MFProgram>(programDto);
 
             try
@@ -74,30 +73,47 @@ namespace MeFit.Controllers
             return CreatedAtAction("GetProgramById", new { Id = program.Id }, newProgram);
         }
 
-        // POST: api/Addresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress(Address address)
-        {
-            _context.Addresses.Add(address);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
-        }
-
         // DELETE: api/Addresses/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProgram([FromHeader(Name = "id")] int id)
         {
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var programs = await _context.Programs.FindAsync(id);
+            if (programs == null)
             {
                 return NotFound();
             }
 
-            _context.Addresses.Remove(address);
+            _context.Programs.Remove(programs);
             await _context.SaveChangesAsync();
 
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProgram([FromHeader(Name = "id")]int id, [FromBody] ProgramEditDTO programOtd)
+        {
+            if(id != programOtd.Id)
+            {
+                return BadRequest();
+            }
+            MFProgram domainProgram = _mapper.Map<MFProgram>(programOtd);
+            _context.Entry(domainProgram).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProgramExist(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
             return NoContent();
         }
 
