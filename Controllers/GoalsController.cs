@@ -9,11 +9,15 @@ using MeFit.Models.Data;
 using MeFit.Models.Domain;
 using AutoMapper;
 using MeFit.Models.DTOs.Goal;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class GoalsController : ControllerBase
     {
         private readonly MeFitDbContext _context;
@@ -118,7 +122,6 @@ namespace MeFit.Controllers
         /// Posts a new goal. Does not assign workouts
         /// </summary>
         /// <param name="goalDto">Goal to post</param>
-        /// <param name="Workouts">Ids of workouts to be added to goal</param>
         /// <returns>Newly created goal</returns>
         [HttpPost]
         public async Task<ActionResult<GoalReadDTO>> PostGoal([FromBody] GoalCreateDTO goalDto)

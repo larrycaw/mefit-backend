@@ -10,11 +10,15 @@ using MeFit.Models.Domain;
 using MeFit.Models.DTOs;
 using AutoMapper;
 using MeFit.Models.DTOs.Program;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class MFProgramController : ControllerBase
     {
         private readonly MeFitDbContext _context;
