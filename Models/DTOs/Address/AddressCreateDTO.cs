@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MeFit.Models.DTOs.Address
 {
     public class AddressCreateDTO
     {
-        [MaxLength(450)]
-        public string Id { get; set; }
         [MaxLength(50)]
         public string AddressLine1 { get; set; }
         [MaxLength(50)]
