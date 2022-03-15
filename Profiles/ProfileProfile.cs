@@ -10,7 +10,7 @@ namespace MeFit.Profiles
         {
             CreateMap<models.Profile, ProfileCreateDTO>().ReverseMap();
             CreateMap<models.Profile, ProfileReadDTO>().ReverseMap();
-            CreateMap<models.Profile, ProfileReadDTO>().ReverseMap();
+            CreateMap<models.Profile, ProfileUpdateDTO>().ReverseMap();
         }
     }
 }
