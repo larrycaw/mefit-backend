@@ -4,6 +4,7 @@ namespace MeFit.Models.DTOs.Profile
 {
     public class ProfileCreateDTO
     {
+        [MaxLength(36)]
         public string Id { get; set; }
         public int? Weight { get; set; }
         public int? Height { get; set; }
