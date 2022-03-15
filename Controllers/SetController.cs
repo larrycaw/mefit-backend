@@ -26,16 +26,27 @@ namespace MeFit.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Sets
-        [HttpGet]
+        /// <summary>
+        /// Gets all sets.
+        /// 
+        /// GET: api/Set/all
+        /// </summary>
+        /// <returns>List of sets</returns>
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<SetReadDTO>>> GetAllSets()
         {
             var sets = _mapper.Map<List<SetReadDTO>>(await _context.Sets.Include(p => p.Workouts).ToListAsync());
             return Ok(sets);
         }
 
-        // GET: api/Sets/5
-        [HttpGet("ById")]
+        /// <summary>
+        /// Get set by id.
+        /// 
+        /// GET: api/Set
+        /// </summary>
+        /// <param name="id">Set id</param>
+        /// <returns>Set</returns>
+        [HttpGet]
         public async Task<ActionResult<SetReadDTO>> GetSetById([FromHeader(Name = "id")] int id)
         {
             var sets = _mapper.Map<SetReadDTO>( await _context.Sets.Include(s => s.Exercise).Where(s => s.Id == id).FirstAsync());
@@ -49,8 +60,13 @@ namespace MeFit.Controllers
             return Ok(sets);
         }
 
-        // POST: api/Sets
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Posts a new set.
+        /// 
+        /// POST: api/Set
+        /// </summary>
+        /// <param name="setDto">Set to post</param>
+        /// <returns>Newly created set</returns>
         [HttpPost]
         public async Task<ActionResult<Set>> PostSet([FromBody] SetCreateDTO setDto)
         {
@@ -72,8 +88,14 @@ namespace MeFit.Controllers
             return CreatedAtAction("GetSetById", new { Id = set.Id }, newSet);
         }
 
-        // DELETE: api/Sets/5
-        [HttpDelete]
+        /// <summary>
+        /// Delete a set by id.
+        /// 
+        /// DELETE: api/Set/delete
+        /// </summary>
+        /// <param name="id">Set id</param>
+        /// <returns>HTTP response code</returns>
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteSet([FromHeader(Name = "id")] int id)
         {
             var sets = await _context.Sets.FindAsync(id);
@@ -88,8 +110,15 @@ namespace MeFit.Controllers
             return NoContent();
         }
 
-        // Not working
-        [HttpPut]
+        /// <summary>
+        /// Updates a set.
+        /// 
+        /// PUT: api/Set/updateSet
+        /// </summary>
+        /// <param name="id">Set id</param>
+        /// <param name="setDto">New set info</param>
+        /// <returns>HTTP response code</returns>
+        [HttpPut("updateSet")]
         public async Task<IActionResult> UpdateSets([FromHeader(Name = "id")] int id, [FromBody] SetEditDTO setDto)
         {
             if(id != setDto.Id)
