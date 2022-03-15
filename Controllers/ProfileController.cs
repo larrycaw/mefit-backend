@@ -9,11 +9,15 @@ using MeFit.Models.Data;
 using MeFit.Models.DTOs.Goal;
 using MeFit.Models.DTOs.Profile;
 using Profile = MeFit.Models.Domain.Profile;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ProfileController : ControllerBase
     {
         

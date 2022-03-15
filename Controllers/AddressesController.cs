@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using MeFit.Models.Data;
 using MeFit.Models.Domain;
 using MeFit.Models.DTOs.Address;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class AddressesController : ControllerBase
     {
         private readonly MeFitDbContext _context;

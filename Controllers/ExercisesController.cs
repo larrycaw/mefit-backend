@@ -9,11 +9,15 @@ using MeFit.Models.Data;
 using MeFit.Models.Domain;
 using MeFit.Models.DTOs.Exercise;
 using AutoMapper;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ExercisesController : ControllerBase
     {
         private readonly MeFitDbContext _context;
