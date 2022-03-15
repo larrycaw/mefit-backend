@@ -91,7 +91,7 @@ namespace MeFit.Controllers
              if (profile.Id != id)
                  return BadRequest();
              
-             Profile domainProfile = _mapper.Map<Profile>(profile);
+             var domainProfile = _mapper.Map<Profile>(profile);
              _context.Entry(domainProfile).State = EntityState.Modified;
              
              try
@@ -100,7 +100,8 @@ namespace MeFit.Controllers
              }
              catch (DbUpdateConcurrencyException)
              {
-                 if (!ProfileExists(profile.Id))
+                 if (!ProfileExists(profile.Id) || !ProgramExists(profile.ProgramId) || !AddressExists(profile.AddressId)
+                     || !WorkoutExists(profile.WorkoutId) || !SetExists(profile.SetId))
                  {
                      return NotFound();
                  }
@@ -134,11 +135,6 @@ namespace MeFit.Controllers
              return NoContent();
          }
          
-         private bool ProfileExists(string id)
-         {
-             return _context.Profiles.Any(p => p.Id == id);
-         }
-         
          /// <summary>
          /// Gets user's current unfinished goal
          /// 
@@ -157,6 +153,30 @@ namespace MeFit.Controllers
                  return NotFound();
              
              return Ok(currentGoal);
+         }
+         private bool ProfileExists(string id)
+         {
+             return _context.Profiles.Any(p => p.Id == id);
+         }
+         
+         private bool ProgramExists(int? id)
+         {
+             return _context.Programs.Any(p => p.Id == id);
+         }
+         
+         private bool AddressExists(int? id)
+         {
+             return _context.Addresses.Any(a => a.Id == id);
+         }
+         
+         private bool WorkoutExists(int? id)
+         {
+             return _context.Workouts.Any(w => w.Id == id);
+         }
+         
+         private bool SetExists(int? id)
+         {
+             return _context.Sets.Any(s => s.Id == id);
          }
     }
 }
