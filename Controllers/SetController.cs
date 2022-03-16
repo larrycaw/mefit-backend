@@ -10,11 +10,15 @@ using MeFit.Models.Domain;
 using MeFit.Models.DTOs;
 using AutoMapper;
 using MeFit.Models.DTOs.Set;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class SetController : ControllerBase
     {
         private readonly MeFitDbContext _context;

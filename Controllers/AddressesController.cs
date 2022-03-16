@@ -1,58 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MeFit.Models.Data;
 using MeFit.Models.Domain;
+using MeFit.Models.DTOs.Address;
+using System.Net.Mime;
 
 namespace MeFit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class AddressesController : ControllerBase
     {
         private readonly MeFitDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AddressesController(MeFitDbContext context)
+        public AddressesController(MeFitDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-
-        // GET: api/Addresses
+        
+        /// <summary>
+        /// Gets all addresses, regardless of which user it belongs to
+        /// 
+        /// GET: api/Addresses/all
+        /// </summary>
+        /// <returns>List of addresses</returns>
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<AddressReadDTO>>> GetAddresses()
+        {
+            var addresses = _mapper.Map<List<AddressReadDTO>>(await _context.Addresses.ToListAsync());
+            return Ok(addresses);
+        }
+        
+        /// <summary>
+        /// Gets address given address ID
+        /// 
+        /// GET: api/Address
+        /// </summary>
+        /// <param name="id">Address ID</param>
+        /// <returns>Address</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Address>>> GetAddresses()
+        public async Task<ActionResult<AddressReadDTO>> GetAddress([FromHeader(Name = "id")] int id)
         {
-            return await _context.Addresses.ToListAsync();
-        }
-
-        // GET: api/Addresses/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Address>> GetAddress(int id)
-        {
-            var address = await _context.Addresses.FindAsync(id);
+            var address = _mapper.Map<AddressReadDTO>(await _context.Addresses.FindAsync(id));
 
             if (address == null)
             {
                 return NotFound();
             }
 
-            return address;
+            return Ok(address);
         }
 
-        // PUT: api/Addresses/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(int id, Address address)
+        /// <summary>
+        /// Updates address
+        /// 
+        /// PUT: api/Address
+        /// </summary>
+        /// <param name="address">Address object</param>
+        /// <param name="id">Address ID</param>
+        /// <returns>HTTP response code</returns>
+        [HttpPut]
+        public async Task<IActionResult> UpdateAddress([FromBody] AddressUpdateDTO address, [FromHeader(Name = "id")] int id)
         {
-            if (id != address.Id)
-            {
+            if (address.Id != id)
                 return BadRequest();
-            }
 
-            _context.Entry(address).State = EntityState.Modified;
+            Address domainAddress = _mapper.Map<Address>(address);
+            _context.Entry(domainAddress).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +84,7 @@ namespace MeFit.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AddressExists(id))
+                if (!AddressExists(address.Id))
                 {
                     return NotFound();
                 }
@@ -69,24 +93,44 @@ namespace MeFit.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
-
-        // POST: api/Addresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
+        /// <summary>
+        /// Posts address
+        /// 
+        /// POST: api/Address
+        /// </summary>
+        /// <param name="addressDto">Address to post</param>
+        /// <returns>Newly created exercise</returns>
         [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress(Address address)
+        public async Task<ActionResult<AddressReadDTO>> PostAddress([FromBody] AddressCreateDTO addressDto)
         {
-            _context.Addresses.Add(address);
-            await _context.SaveChangesAsync();
+            var address = _mapper.Map<Address>(addressDto);
 
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            try
+            {
+                _context.Add(address);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            var addedAddress = _mapper.Map<AddressReadDTO>(address);
+            return CreatedAtAction("GetAddress", new { address.Id }, addedAddress);
         }
-
-        // DELETE: api/Addresses/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(int id)
+        
+        /// <summary>
+        /// Deletes address
+        /// 
+        /// DELETE: api/Address/delete
+        /// </summary>
+        /// <param name="id">Address ID</param>
+        /// <returns>HTTP response code</returns>
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteAddress([FromHeader(Name = "id")] int id)
         {
             var address = await _context.Addresses.FindAsync(id);
             if (address == null)
@@ -99,7 +143,7 @@ namespace MeFit.Controllers
 
             return NoContent();
         }
-
+        
         private bool AddressExists(int id)
         {
             return _context.Addresses.Any(e => e.Id == id);
