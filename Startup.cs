@@ -33,6 +33,25 @@ namespace MeFit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy(name: "devPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy(name: "prodPolicy", builder =>
+                {
+                    builder.WithOrigins("https://me-fit-noroff.herokuapp.com")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             if (Environment.IsProduction())
             {
                 services.Configure<ForwardedHeadersOptions>(options =>
@@ -51,6 +70,7 @@ namespace MeFit
                 services.AddDbContext<MeFitDbContext>(options =>
                     options.UseSqlServer(
                         Configuration.GetConnectionString("LocalDevelopment")));
+
 
             }
 
@@ -115,6 +135,11 @@ namespace MeFit
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            if (env.IsDevelopment())
+                app.UseCors("devPolicy");
+            else
+                app.UseCors("prodPolicy");
 
             //app.UseAuthentication();
             //app.UseIdentityServer();
