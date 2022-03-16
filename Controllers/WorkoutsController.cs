@@ -160,7 +160,7 @@ namespace MeFit.Controllers
         /// <param name="sets">List of set Id's</param>
         /// <param name="id">Workout id</param>
         /// <returns>HTTP response code</returns>
-        [HttpPost("assignSets")]
+        [HttpPut("assignSets")]
         public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, int id)
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
