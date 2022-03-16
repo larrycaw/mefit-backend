@@ -49,7 +49,7 @@ namespace MeFit.Controllers
         [HttpGet]
         public async Task<ActionResult<SetReadDTO>> GetSetById([FromHeader(Name = "id")] int id)
         {
-            var sets = _mapper.Map<SetReadDTO>( await _context.Sets.Include(s => s.Exercise).Where(s => s.Id == id).FirstAsync());
+            var sets = _mapper.Map<SetReadDTO>( await _context.Sets.Include(s => s.Exercise).Include(s => s.Workouts).Where(s => s.Id == id).FirstAsync());
 
             if (sets == null)
             {
