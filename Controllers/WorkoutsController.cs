@@ -9,6 +9,7 @@ using MeFit.Models.Data;
 using MeFit.Models.Domain;
 using AutoMapper;
 using MeFit.Models.DTOs.Workout;
+using MeFit.Models.DTOs.Exercise;
 using System.Net.Mime;
 
 namespace MeFit.Controllers
@@ -186,6 +187,44 @@ namespace MeFit.Controllers
 
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        /// <summary>
+        /// Get all exercises in a workout.
+        /// 
+        /// GET: api/Workouts/exercises
+        /// </summary>
+        /// <param name="id">Workout id</param>
+        /// <returns>List of exercises</returns>
+        [HttpGet("exercises")]
+        public async Task<ActionResult<IEnumerable<ExerciseReadDTO>>> GetExercisesInWorkout([FromHeader(Name = "id")] int id)
+        {
+            var query =
+                from workout in _context.Workouts.Include(w => w.Sets)
+                where workout.Id == id
+                select workout;
+
+            var workoutSet = _mapper.Map<WorkoutReadDTO>(await query.FirstAsync());
+        
+            var query2 =
+                from s in _context.Sets
+                where workoutSet.Sets.Contains(s.Id)
+                select s.ExerciseId;
+
+            var query3 =
+                from e in _context.Exercises
+                where query2.Contains(e.Id)
+                select e;
+
+            var exercises = _mapper.Map<List<ExerciseReadDTO>>(await query3.ToListAsync());
+
+            if (exercises == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(exercises);
         }
 
         private bool WorkoutExists(int id)
