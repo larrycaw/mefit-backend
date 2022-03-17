@@ -63,7 +63,7 @@ namespace MeFit.Controllers
          /// <param name="profileDto">Profile to post</param>
          /// <returns>Newly created profile</returns>
          [HttpPost]
-         public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromHeader] ProfileCreateDTO profileDto)
+         public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
          {
              var profile = _mapper.Map<Profile>(profileDto);
              
@@ -77,7 +77,7 @@ namespace MeFit.Controllers
                  return StatusCode(StatusCodes.Status500InternalServerError);
              }
              
-             var newProfile = _mapper.Map<ProfileReadDTO>(profileDto);
+             var newProfile = _mapper.Map<ProfileReadDTO>(profile);
              return CreatedAtAction("GetProfile", new { profile.Id }, newProfile);
          }
          
