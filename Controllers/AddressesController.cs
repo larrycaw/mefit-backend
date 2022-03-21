@@ -31,21 +31,21 @@ namespace MeFit.Controllers
 
         // TODO: remove testing endpoints
         [HttpGet("authorizationAny")]
-        [Authorize(Roles = "User")]
+        [Authorize(Policy = "isUser")]
         public string TestAuthorizationAny()
         {
             return "user auth";
         }
 
         [HttpGet("authorizationContributor")]
-        [Authorize(Roles = "Contributor")]
+        [Authorize(Policy = "isContributor")]
         public string TestAuthorizationContributor()
         {
             return "contibutor auth";
         }
 
         [HttpGet("authorizationAdmin")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Policy = "isAdministrator")]
         public string TestAuthorizationAdmin()
         {
             return "admin auth";
