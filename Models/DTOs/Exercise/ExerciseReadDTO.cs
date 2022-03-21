@@ -4,6 +4,7 @@ namespace MeFit.Models.DTOs.Exercise
 {
     public class ExerciseReadDTO
     {
+        public int Id { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }
         [MaxLength(300)]
