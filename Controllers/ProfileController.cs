@@ -10,6 +10,7 @@ using MeFit.Models.DTOs.Goal;
 using MeFit.Models.DTOs.Profile;
 using Profile = MeFit.Models.Domain.Profile;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeFit.Controllers
 {
@@ -36,6 +37,7 @@ namespace MeFit.Controllers
          /// </summary>
          /// <returns>List of profiles</returns>
          [HttpGet("all")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProfileReadDTO>>> GetProfiles()
         {
             var profiles = _mapper.Map<List<ProfileReadDTO>>(await _context.Profiles.ToListAsync());
@@ -43,7 +45,8 @@ namespace MeFit.Controllers
          }
          
          [HttpGet]
-         public async Task<ActionResult<ProfileReadDTO>> GetProfile([FromHeader(Name = "id")] string id)
+        [Authorize]
+        public async Task<ActionResult<ProfileReadDTO>> GetProfile([FromHeader(Name = "id")] string id)
          {
              var profile = _mapper.Map<ProfileReadDTO>(await _context.Profiles.FindAsync(id));
              
@@ -63,7 +66,8 @@ namespace MeFit.Controllers
          /// <param name="profileDto">Profile to post</param>
          /// <returns>Newly created profile</returns>
          [HttpPost]
-         public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
+        [Authorize]
+        public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
          {
              var profile = _mapper.Map<Profile>(profileDto);
              
@@ -90,7 +94,8 @@ namespace MeFit.Controllers
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
          [HttpPut]
-         public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO profile, [FromHeader(Name = "id")] string id)
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO profile, [FromHeader(Name = "id")] string id)
          {
              if (profile.Id != id)
                  return BadRequest();
@@ -125,6 +130,7 @@ namespace MeFit.Controllers
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
          [HttpDelete("delete")]
+         [Authorize]
          public async Task<IActionResult> DeleteProfile([FromHeader(Name = "id")] string id)
          {
              var profile = await _context.Profiles.FindAsync(id);
@@ -147,7 +153,8 @@ namespace MeFit.Controllers
          /// <param name="userId">User ID</param>
          /// <returns>Current goal</returns>
          [HttpGet("currentGoal")]
-         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
+        [Authorize]
+        public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
          {
              var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals
                  .Include(g => g.Workouts).Where(g => g.ProfileId == userId)

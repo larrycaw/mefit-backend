@@ -16,6 +16,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace MeFit
 {
@@ -33,6 +37,43 @@ namespace MeFit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+                        {
+                            var client = new HttpClient();
+                            // TODO: store safely
+                            const string keycloak = "http://localhost:8080";
+                            var keyuri = $"{keycloak}/auth/realms/test/protocol/openid-connect/certs";
+                            var response = client.GetAsync(keyuri).Result;
+                            var responseString = response.Content.ReadAsStringAsync().Result;
+                            var keys = JsonConvert.DeserializeObject<JsonWebKeySet>(responseString);
+                            return keys.Keys;
+                        },
+
+                        ValidIssuers = new List<string>
+                        {
+                            //Configuration["TokenSecrets:IssuerURI"]
+                            "http://localhost:8080/auth/realms/test"
+                        },
+                        
+                        ValidAudience = "account",
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrator", policy => policy.RequireClaim("user_role", "[Administrator]"));
+                options.AddPolicy("Contributor", policy => policy.RequireClaim("user_role", "[Contributor]"));
+                options.AddPolicy("User", policy => policy.RequireClaim("user_role", "[User]"));
+                //options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+                //options.AddPolicy("Contributor", policy => policy.RequireRole("Contributor"));
+                //options.AddPolicy("User", policy => policy.RequireRole("User"));
+            });
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy(name: "devPolicy", builder =>
@@ -141,7 +182,7 @@ namespace MeFit
             else
                 app.UseCors("prodPolicy");
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             //app.UseIdentityServer();
             app.UseAuthorization();
 

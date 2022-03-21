@@ -9,6 +9,7 @@ using MeFit.Models.Data;
 using MeFit.Models.Domain;
 using MeFit.Models.DTOs.Address;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeFit.Controllers
 {
@@ -27,7 +28,29 @@ namespace MeFit.Controllers
             _context = context;
             _mapper = mapper;
         }
-        
+
+        // TODO: remove testing endpoints
+        [HttpGet("authorizationAny")]
+        [Authorize(Roles = "User")]
+        public string TestAuthorizationAny()
+        {
+            return "user auth";
+        }
+
+        [HttpGet("authorizationContributor")]
+        [Authorize(Roles = "Contributor")]
+        public string TestAuthorizationContributor()
+        {
+            return "contibutor auth";
+        }
+
+        [HttpGet("authorizationAdmin")]
+        [Authorize(Roles = "Administrator")]
+        public string TestAuthorizationAdmin()
+        {
+            return "admin auth";
+        }
+
         /// <summary>
         /// Gets all addresses, regardless of which user it belongs to
         /// 
@@ -35,6 +58,7 @@ namespace MeFit.Controllers
         /// </summary>
         /// <returns>List of addresses</returns>
         [HttpGet("all")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<AddressReadDTO>>> GetAddresses()
         {
             var addresses = _mapper.Map<List<AddressReadDTO>>(await _context.Addresses.ToListAsync());
@@ -49,6 +73,7 @@ namespace MeFit.Controllers
         /// <param name="id">Address ID</param>
         /// <returns>Address</returns>
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<AddressReadDTO>> GetAddress([FromHeader(Name = "id")] int id)
         {
             var address = _mapper.Map<AddressReadDTO>(await _context.Addresses.FindAsync(id));
@@ -70,6 +95,7 @@ namespace MeFit.Controllers
         /// <param name="id">Address ID</param>
         /// <returns>HTTP response code</returns>
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateAddress([FromBody] AddressUpdateDTO address, [FromHeader(Name = "id")] int id)
         {
             if (address.Id != id)
@@ -104,6 +130,7 @@ namespace MeFit.Controllers
         /// <param name="addressDto">Address to post</param>
         /// <returns>Newly created exercise</returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AddressReadDTO>> PostAddress([FromBody] AddressCreateDTO addressDto)
         {
             var address = _mapper.Map<Address>(addressDto);
@@ -130,6 +157,7 @@ namespace MeFit.Controllers
         /// <param name="id">Address ID</param>
         /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteAddress([FromHeader(Name = "id")] int id)
         {
             var address = await _context.Addresses.FindAsync(id);

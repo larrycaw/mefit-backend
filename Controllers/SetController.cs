@@ -11,6 +11,7 @@ using MeFit.Models.DTOs;
 using AutoMapper;
 using MeFit.Models.DTOs.Set;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeFit.Controllers
 {
@@ -37,6 +38,7 @@ namespace MeFit.Controllers
         /// </summary>
         /// <returns>List of sets</returns>
         [HttpGet("all")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<SetReadDTO>>> GetAllSets()
         {
             var sets = _mapper.Map<List<SetReadDTO>>(await _context.Sets.Include(p => p.Workouts).ToListAsync());
@@ -51,6 +53,7 @@ namespace MeFit.Controllers
         /// <param name="id">Set id</param>
         /// <returns>Set</returns>
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<SetReadDTO>> GetSetById([FromHeader(Name = "id")] int id)
         {
             var sets = _mapper.Map<SetReadDTO>( await _context.Sets.Include(s => s.Exercise).Include(s => s.Workouts).Where(s => s.Id == id).FirstAsync());
@@ -72,6 +75,7 @@ namespace MeFit.Controllers
         /// <param name="setDto">Set to post</param>
         /// <returns>Newly created set</returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Set>> PostSet([FromBody] SetCreateDTO setDto)
         {
 
@@ -100,6 +104,7 @@ namespace MeFit.Controllers
         /// <param name="id">Set id</param>
         /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteSet([FromHeader(Name = "id")] int id)
         {
             var sets = await _context.Sets.FindAsync(id);
@@ -123,6 +128,7 @@ namespace MeFit.Controllers
         /// <param name="setDto">New set info</param>
         /// <returns>HTTP response code</returns>
         [HttpPut("updateSet")]
+        [Authorize]
         public async Task<IActionResult> UpdateSets([FromHeader(Name = "id")] int id, [FromBody] SetEditDTO setDto)
         {
             if(id != setDto.Id)
