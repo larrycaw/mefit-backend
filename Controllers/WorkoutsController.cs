@@ -162,13 +162,67 @@ namespace MeFit.Controllers
         /// <param name="id">Workout id</param>
         /// <returns>HTTP response code</returns>
         [HttpPut("assignSets")]
-        public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, int id)
+        public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, [FromHeader(Name = "id")] int id)
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
 
             foreach (var set in workout.Sets)
             {
                 workout.Sets.Remove(set);
+            }
+
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var setId in sets)
+            {
+                var tempSet = await _context.Sets.FirstOrDefaultAsync(w => w.Id == setId);
+                if (tempSet != null)
+                {
+                    workout.Sets.Add(tempSet);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Assign sets to a workout by exercise id's
+        /// 
+        /// PUT api/Workouts/assignSetsByExercise
+        /// </summary>
+        /// <param name="exercises">List of exercise id's</param>
+        /// <param name="id">Workout id</param>
+        /// <returns></returns>
+        [HttpPut("assignSetsByExercise")]
+        public async Task<IActionResult> AssigneSetsByExercise([FromBody] List<int> exercises, [FromHeader(Name = "id")] int id)
+        {
+            var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
+
+            foreach (var set in workout.Sets)
+            {
+                workout.Sets.Remove(set);
+            }
+
+            List<int> sets = new List<int>();
+            foreach (var exercise in exercises)
+            {
+                var query =
+                    from s in _context.Sets
+                    where s.ExerciseId == exercise
+                    select s.Id;
+
+                if(query != null)
+                {
+                    var qList = query.ToList();
+                    foreach (var setId in qList)
+                    {
+                        sets.Add(setId);
+                    }
+                }
             }
 
             if (workout == null)
