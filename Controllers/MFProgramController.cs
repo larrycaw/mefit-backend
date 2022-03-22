@@ -39,7 +39,7 @@ namespace MeFit.Controllers
         /// </summary>
         /// <returns>List of programs</returns>
         [HttpGet("all")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<ProgramReadDTO>>> GetAllPrograms()
         {
             var programs = _mapper.Map<List<ProgramReadDTO>>(await _context.Programs.Include(p => p.Workouts).ToListAsync());
@@ -54,7 +54,7 @@ namespace MeFit.Controllers
         /// <param name="id">Program id</param>
         /// <returns>Program</returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<ProgramReadDTO>> GetProgramById([FromHeader(Name = "id")] int id)
         {
             var program = _mapper.Map<ProgramReadDTO>( await _context.Programs.Include(p => p.Workouts).Where(p => p.Id == id).FirstAsync());
@@ -76,10 +76,9 @@ namespace MeFit.Controllers
         /// <param name="programDto">Program to post</param>
         /// <returns>Newly created program</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<ActionResult<MFProgram>> PostProgram([FromBody] ProgramCreateDTO programDto)
         {
-
             var program = _mapper.Map<MFProgram>(programDto);
 
             try
@@ -105,7 +104,7 @@ namespace MeFit.Controllers
         /// <param name="id">Program id</param>
         /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<IActionResult> DeleteProgram([FromHeader(Name = "id")] int id)
         {
             var programs = await _context.Programs.FindAsync(id);
@@ -129,7 +128,7 @@ namespace MeFit.Controllers
         /// <param name="programOtd">New program info</param>
         /// <returns>HTTP response code</returns>
         [HttpPut("updateProgram")]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<IActionResult> UpdateProgram([FromHeader(Name = "id")]int id, [FromBody] ProgramEditDTO programOtd)
         {
             if(id != programOtd.Id)
@@ -164,7 +163,7 @@ namespace MeFit.Controllers
         /// <param name="id">Program id</param>
         /// <returns>HTTP response code</returns>
         [HttpPost("assignWorkouts")]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<IActionResult> AssigneWorkouts([FromBody] List<int> workouts, int id)
         {
             var program = await _context.Programs.Include(p => p.Workouts).FirstOrDefaultAsync(p => p.Id == id);

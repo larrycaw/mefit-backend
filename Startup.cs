@@ -66,19 +66,9 @@ namespace MeFit
 
             services.AddAuthorization(options =>
             {
-                //options.AddPolicy("isAdmin", policy => policy.RequireRole("Administrator"));
-                //options.AddPolicy("Contributor", policy => policy.RequireClaim("user_role", "Contributor"));
-                //options.AddPolicy("User", policy => policy.RequireClaim("user_role", "User"));
-
-
                 options.AddPolicy("isAdministrator", policy => policy.RequireClaim("user_role", "Admin"));
                 options.AddPolicy("isContributor", policy => policy.RequireClaim("user_role", "Contributor"));
                 options.AddPolicy("isUser", policy => policy.RequireClaim("user_role", "User"));
-
-
-                //options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
-                //options.AddPolicy("Contributor", policy => policy.RequireRole("Contributor"));
-                //options.AddPolicy("User", policy => policy.RequireRole("User"));
             });
 
             services.AddCors(opt =>

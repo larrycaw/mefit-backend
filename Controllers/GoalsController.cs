@@ -38,7 +38,7 @@ namespace MeFit.Controllers
         /// </summary>
         /// <returns>List of goals</returns>
         [HttpGet("all")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<GoalReadDTO>>> GetGoals()
         {
             var goals = _mapper.Map<List<GoalReadDTO>>(await _context.Goals.Include(g => g.Workouts).ToListAsync());
@@ -53,9 +53,10 @@ namespace MeFit.Controllers
         /// <param name="id">Goal ID</param>
         /// <returns>Goal</returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<GoalReadDTO>> GetGoal([FromHeader(Name = "id")] int id)
         {
+            // TODO: get user id in header, so that users can only get their own goal
             var goal = _mapper.Map<GoalReadDTO>(await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == id));
 
             if (goal == null)
@@ -74,9 +75,12 @@ namespace MeFit.Controllers
         /// <param name="userId">User ID</param>
         /// <returns>List of goals</returns>
         [HttpGet("user")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<GoalByUserDTO>>> GetUserGoals([FromHeader(Name = "userId")] string userId)
         {
+            if (TokenUserId() != userId && !IsAdmin())
+                return Forbid();
+
             var goals = _mapper.Map<List<GoalByUserDTO>>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == userId).ToListAsync());
             return Ok(goals);
         }
@@ -89,9 +93,12 @@ namespace MeFit.Controllers
         /// <param name="userId">User ID</param>
         /// <returns>Current goal</returns>
         [HttpGet("currentGoal")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
         {
+            if (TokenUserId() != userId && !IsAdmin())
+                return Forbid();
+
             var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == userId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
 
             if (currentGoal == null)
@@ -109,10 +116,15 @@ namespace MeFit.Controllers
         /// <param name="id">Goal ID</param>
         /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<IActionResult> DeleteGoal([FromHeader(Name = "id")] int id)
         {
             var goal = await _context.Goals.FindAsync(id);
+
+            // Only allow users to delete their own goal, admins can delete any goal
+            if (TokenUserId() != goal.ProfileId && !IsAdmin())
+                return Forbid();
+
             if (goal == null)
             {
                 return NotFound();
@@ -130,9 +142,13 @@ namespace MeFit.Controllers
         /// <param name="goalDto">Goal to post</param>
         /// <returns>Newly created goal</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<GoalReadDTO>> PostGoal([FromBody] GoalCreateDTO goalDto)
         {
+            // Only allow users to set goal for themselves
+            if (TokenUserId() != goalDto.ProfileId)
+                return Forbid();
+
             // Check if user already has an active goal
             var activeGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == goalDto.ProfileId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
 
@@ -163,20 +179,24 @@ namespace MeFit.Controllers
         /// <param name="goalId">Goal ID</param>
         /// <returns>HTTP response message</returns>
         [HttpPut("assignWorkouts")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult> AssignWorkoutToGoal([FromBody] List<int> Workouts, [FromHeader(Name = "GoalID")] int goalId)
         {
 
             var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
 
-            foreach(var workout in goal.Workouts)
-            {
-                goal.Workouts.Remove(workout);
-            }
+            // Only allow users to modify their own goals
+            if (TokenUserId() != goal.ProfileId)
+                return Forbid();
 
             if (goal == null)
             {
                 return NotFound();
+            }
+
+            foreach (var workout in goal.Workouts)
+            {
+                goal.Workouts.Remove(workout);
             }
 
             foreach (var workoutId in Workouts)
@@ -199,7 +219,7 @@ namespace MeFit.Controllers
         /// <param name="goalId">Goal ID</param>
         /// <returns>HTTP request message</returns>
         [HttpPut("assignProgram")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult> AssignProgramToGoal([FromBody] int programId, [FromHeader(Name = "GoalID")] int goalId)
         {
             var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
@@ -208,6 +228,10 @@ namespace MeFit.Controllers
             {
                 return NotFound();
             }
+
+            // Only allow users to modify their own goals
+            if (TokenUserId() != goal.ProfileId)
+                return Forbid();
 
             var tempProgram = await _context.Programs.FirstOrDefaultAsync(p => p.Id == programId);
 
@@ -225,13 +249,17 @@ namespace MeFit.Controllers
         /// <param name="goalID">Goal ID</param>
         /// <returns>HTTP response message</returns>
         [HttpPut("updateGoal")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<IActionResult> UpdateGoal([FromBody] GoalEditDTO goalDto, [FromHeader(Name = "goalID")] int goalID)
         {
             if (goalID != goalDto.Id || !ProfileExists(goalDto.ProfileId))
             {
                 return BadRequest();
             }
+
+            // Only allow users to modify their own goals
+            if (TokenUserId() != goalDto.ProfileId)
+                return Forbid();
 
             var domainGoal = _mapper.Map<Goal>(goalDto);
             _context.Entry(domainGoal).State = EntityState.Modified;
@@ -267,6 +295,16 @@ namespace MeFit.Controllers
         private bool ProfileExists(string id)
         {
             return _context.Profiles.Any(e => e.Id == id);
+        }
+
+        private string TokenUserId()
+        {
+            return HttpContext.User.Claims.ToList().Find(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+        }
+
+        private bool IsAdmin()
+        {
+            return HttpContext.User.Claims.ToList().Exists(x => x.Type == "user_role" && x.Value == "Admin");
         }
     }
 }

@@ -40,7 +40,7 @@ namespace MeFit.Controllers
         /// </summary>
         /// <returns>List of workouts</returns>
         [HttpGet("all")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<WorkoutReadDTO>>> GetAllWorkouts()
         {
             var workouts = _mapper.Map<List<WorkoutReadDTO>>(await _context.Workouts.Include(w =>  w.Programs).Include(w => w.Sets).Include(w => w.Goals).ToListAsync());
@@ -55,7 +55,7 @@ namespace MeFit.Controllers
         /// <param name="id">Workout id</param>
         /// <returns>A workout</returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<WorkoutReadDTO>> GetWorkoutById([FromHeader(Name = "id")]int id)
         {
             var workout = _mapper.Map<WorkoutReadDTO>( await _context.Workouts.Include(w => w.Programs).Include(w => w.Sets).Include(w => w.Goals).Where(w => w.Id == id).FirstAsync());
@@ -78,7 +78,7 @@ namespace MeFit.Controllers
         /// <param name="workoutDTO">Info to create a new workout</param>
         /// <returns>Newly added workout</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<ActionResult<Workout>> PostWorkout([FromBody] WorkoutCreateDTO workoutDTO)
         {
             var workout = _mapper.Map<Workout>(workoutDTO);
@@ -106,7 +106,7 @@ namespace MeFit.Controllers
         /// <param name="id">Workout id</param>
         /// <returns>HTTP response code</returns>
         [HttpDelete("delete")]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<IActionResult> DeleteWorkout([FromHeader(Name = "id")] int id)
         {
             var workout = await _context.Workouts.FindAsync(id);
@@ -130,7 +130,7 @@ namespace MeFit.Controllers
         /// <param name="workoutDto">Info to update workout with</param>
         /// <returns>HTTP response code</returns>
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = "isContributor")]
         public async Task<IActionResult> UpdateWorkout([FromHeader(Name = "id")] int id, [FromBody] WorkoutEditDTO workoutDto)
         {
             if(id != workoutDto.Id)
@@ -168,7 +168,7 @@ namespace MeFit.Controllers
         /// <param name="id">Workout id</param>
         /// <returns>HTTP response code</returns>
         [HttpPut("assignSets")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, int id)
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
@@ -204,7 +204,7 @@ namespace MeFit.Controllers
         /// <param name="id">Workout id</param>
         /// <returns>List of exercises</returns>
         [HttpGet("exercises")]
-        [Authorize]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<ExerciseReadDTO>>> GetExercisesInWorkout([FromHeader(Name = "id")] int id)
         {
             var query =

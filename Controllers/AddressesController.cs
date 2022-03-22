@@ -10,6 +10,9 @@ using MeFit.Models.Domain;
 using MeFit.Models.DTOs.Address;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Net.Http.Headers;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MeFit.Controllers
 {
@@ -50,6 +53,7 @@ namespace MeFit.Controllers
         {
             return "admin auth";
         }
+        // TODO: fix authorization for address if we keep it!!
 
         /// <summary>
         /// Gets all addresses, regardless of which user it belongs to
@@ -175,6 +179,21 @@ namespace MeFit.Controllers
         private bool AddressExists(int id)
         {
             return _context.Addresses.Any(e => e.Id == id);
+        }
+
+        private string TokenUserId()
+        {
+            return HttpContext.User.Claims.ToList().Find(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+        }
+
+        private bool IsAdmin()
+        {
+            return HttpContext.User.Claims.ToList().Exists(x => x.Type == "user_role" && x.Value == "Admin");
+        }
+
+        private bool IsContributor()
+        {
+            return HttpContext.User.Claims.ToList().Exists(x => x.Type == "user_role" && x.Value == "Contributor");
         }
     }
 }
