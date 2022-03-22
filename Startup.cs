@@ -45,9 +45,7 @@ namespace MeFit
                         IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
                         {
                             var client = new HttpClient();
-                            // TODO: store safely
-                            const string keycloak = "http://localhost:8080";
-                            var keyuri = $"{keycloak}/auth/realms/test/protocol/openid-connect/certs";
+                            var keyuri = Configuration["KeyURI"];
                             var response = client.GetAsync(keyuri).Result;
                             var responseString = response.Content.ReadAsStringAsync().Result;
                             var keys = JsonConvert.DeserializeObject<JsonWebKeySet>(responseString);
@@ -56,8 +54,7 @@ namespace MeFit
 
                         ValidIssuers = new List<string>
                         {
-                            //Configuration["TokenSecrets:IssuerURI"]
-                            "http://localhost:8080/auth/realms/test"
+                            Configuration["IssuerURI"]
                         },
                         
                         ValidAudience = "account",
