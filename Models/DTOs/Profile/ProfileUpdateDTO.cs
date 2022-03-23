@@ -7,10 +7,6 @@ namespace MeFit.Models.DTOs.Profile
     {
         [MaxLength(36)]
         public string Id { get; set; }
-        public int? AddressId { get; set; }
-        public int? ProgramId { get; set; }
-        public int? WorkoutId { get; set; }
-        public int? SetId { get; set; }
         public int Weight { get; set; }
         public int Height { get; set; }
         [MaxLength(200)]

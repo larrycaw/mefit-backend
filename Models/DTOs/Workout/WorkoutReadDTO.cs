@@ -10,7 +10,6 @@ namespace MeFit.Models.DTOs.Workout
         public string Name { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
-        public bool Complete { get; set; }
         public List<int> Sets { get; set; }
         public List<int> Goals { get; set; }
         public List<int> Programs { get; set; }

@@ -19,60 +19,6 @@ namespace MeFit.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("MeFit.Models.Domain.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AddressLine1")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("AddressLine3")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Contry")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddressLine1 = "Hans Nielsen Hauges Gate 10",
-                            City = "Trondheim",
-                            Contry = "Norway",
-                            PostalCode = "7067"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddressLine1 = "Høgreina 18c",
-                            City = "Trondheim",
-                            Contry = "Norway",
-                            PostalCode = "7079"
-                        });
-                });
-
             modelBuilder.Entity("MeFit.Models.Domain.Exercise", b =>
                 {
                     b.Property<int>("Id")
@@ -176,7 +122,7 @@ namespace MeFit.Migrations
                             Id = 1,
                             Achieved = false,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 147, DateTimeKind.Local).AddTicks(2507),
+                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 647, DateTimeKind.Local).AddTicks(4375),
                             ProgramId = 1
                         },
                         new
@@ -184,7 +130,7 @@ namespace MeFit.Migrations
                             Id = 2,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3317),
+                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(562),
                             ProgramId = 2
                         },
                         new
@@ -192,7 +138,7 @@ namespace MeFit.Migrations
                             Id = 3,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3372),
+                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(705),
                             ProgramId = 2
                         });
                 });
@@ -242,9 +188,6 @@ namespace MeFit.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Disabilities")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -256,27 +199,10 @@ namespace MeFit.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int?>("ProgramId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SetId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Weight")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkoutId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("ProgramId");
-
-                    b.HasIndex("SetId");
-
-                    b.HasIndex("WorkoutId");
 
                     b.ToTable("Profiles");
 
@@ -284,14 +210,10 @@ namespace MeFit.Migrations
                         new
                         {
                             Id = "keycloak-uid",
-                            AddressId = 1,
                             Disabilities = "none",
                             Height = 171,
                             MedicalConditions = "Anxiety",
-                            ProgramId = 1,
-                            SetId = 1,
-                            Weight = 60,
-                            WorkoutId = 1
+                            Weight = 60
                         });
                 });
 
@@ -336,9 +258,6 @@ namespace MeFit.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Complete")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -355,21 +274,18 @@ namespace MeFit.Migrations
                         new
                         {
                             Id = 1,
-                            Complete = false,
                             Name = "Arm day",
                             Type = "Strength"
                         },
                         new
                         {
                             Id = 2,
-                            Complete = true,
                             Name = "Leg day",
                             Type = "Strength"
                         },
                         new
                         {
                             Id = 3,
-                            Complete = false,
                             Name = "Running",
                             Type = "Cardio"
                         });
@@ -383,6 +299,9 @@ namespace MeFit.Migrations
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
                     b.HasKey("GoalId", "WorkoutId");
 
                     b.HasIndex("WorkoutId");
@@ -393,12 +312,14 @@ namespace MeFit.Migrations
                         new
                         {
                             GoalId = 1,
-                            WorkoutId = 1
+                            WorkoutId = 1,
+                            Completed = false
                         },
                         new
                         {
                             GoalId = 2,
-                            WorkoutId = 2
+                            WorkoutId = 2,
+                            Completed = false
                         });
                 });
 
@@ -484,33 +405,6 @@ namespace MeFit.Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("Program");
-                });
-
-            modelBuilder.Entity("MeFit.Models.Domain.Profile", b =>
-                {
-                    b.HasOne("MeFit.Models.Domain.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.HasOne("MeFit.Models.Domain.MFProgram", "Program")
-                        .WithMany()
-                        .HasForeignKey("ProgramId");
-
-                    b.HasOne("MeFit.Models.Domain.Set", "Set")
-                        .WithMany()
-                        .HasForeignKey("SetId");
-
-                    b.HasOne("MeFit.Models.Domain.Workout", "Workout")
-                        .WithMany()
-                        .HasForeignKey("WorkoutId");
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Program");
-
-                    b.Navigation("Set");
-
-                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("MeFit.Models.Domain.Set", b =>

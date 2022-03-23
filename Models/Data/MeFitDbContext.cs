@@ -8,13 +8,13 @@ namespace MeFit.Models.Data
 {
     public class MeFitDbContext : DbContext
     {
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<MFProgram> Programs { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        //public DbSet<WorkoutGoal> WorkoutGoals { get; set; }
 
         public MeFitDbContext([NotNullAttribute] DbContextOptions options) : base(options)
         {
@@ -80,24 +80,21 @@ namespace MeFit.Models.Data
             {
                 Id = 1,
                 Name = "Arm day",
-                Type = "Strength",
-                Complete = false
+                Type = "Strength"
             });
 
             modelBuilder.Entity<Workout>().HasData(new Workout
             {
                 Id = 2,
                 Name = "Leg day",
-                Type = "Strength",
-                Complete = true
+                Type = "Strength"
             });
 
             modelBuilder.Entity<Workout>().HasData(new Workout
             {
                 Id = 3,
                 Name = "Running",
-                Type = "Cardio",
-                Complete = false
+                Type = "Cardio"
             });
 
             modelBuilder.Entity<MFProgram>().HasData(new MFProgram
@@ -151,37 +148,28 @@ namespace MeFit.Models.Data
             modelBuilder.Entity<Profile>().HasData(new Profile
             {
                 Id = "keycloak-uid",
-                AddressId = 1,
-                ProgramId = 1,
-                WorkoutId = 1,
-                SetId = 1,
                 Weight = 60,
                 Height = 171,
                 MedicalConditions = "Anxiety",
                 Disabilities = "none"
             });
 
-            modelBuilder.Entity<Address>().HasData(new Address
-            {
-                Id = 1,
-                AddressLine1 = "Hans Nielsen Hauges Gate 10",
-                AddressLine2 = null,
-                AddressLine3 = null,
-                City =  "Trondheim",
-                PostalCode = "7067",
-                Contry = "Norway"
-            });
 
-            modelBuilder.Entity<Address>().HasData(new Address
-            {
-                Id = 2,
-                AddressLine1 = "Høgreina 18c",
-                AddressLine2 = null,
-                AddressLine3 = null,
-                City = "Trondheim",
-                PostalCode = "7079",
-                Contry = "Norway"
-            });
+
+
+            //modelBuilder.Entity<WorkoutGoal>().HasData(new WorkoutGoal
+            //{
+            //    Completed = false,
+            //    WorkoutId = 1,
+            //    GoalId = 1,
+            //});
+
+            //modelBuilder.Entity<WorkoutGoal>().HasData(new WorkoutGoal
+            //{
+            //    Completed = false,
+            //    WorkoutId = 2,
+            //    GoalId = 2,
+            //});
 
             modelBuilder.Entity<Workout>()
                 .HasMany(s => s.Sets)
@@ -210,9 +198,10 @@ namespace MeFit.Models.Data
                     je =>
                     {
                         je.HasKey("GoalId", "WorkoutId");
+                        je.Property<bool>("Completed");
                         je.HasData(
-                            new { WorkoutId = 1, GoalId = 1 },
-                            new { WorkoutId = 2, GoalId = 2 }
+                            new { WorkoutId = 1, GoalId = 1, Completed = false },
+                            new { WorkoutId = 2, GoalId = 2, Completed = false }
                         );
                     });
 
