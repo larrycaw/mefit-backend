@@ -3,28 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MeFit.Migrations
 {
-    public partial class InitRedo : Migration
+    public partial class ReBootDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Addresses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AddressLine1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    AddressLine2 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    AddressLine3 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PostalCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Contry = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Exercises",
                 columns: table => new
@@ -40,6 +22,21 @@ namespace MeFit.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Exercises", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Profiles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: true),
+                    Height = table.Column<int>(type: "int", nullable: true),
+                    MedicalConditions = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Disabilities = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Profiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,8 +60,7 @@ namespace MeFit.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Complete = table.Column<bool>(type: "bit", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -89,97 +85,6 @@ namespace MeFit.Migrations
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkoutPrograms",
-                columns: table => new
-                {
-                    ProgramId = table.Column<int>(type: "int", nullable: false),
-                    WorkoutId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkoutPrograms", x => new { x.ProgramId, x.WorkoutId });
-                    table.ForeignKey(
-                        name: "FK_WorkoutPrograms_Programs_ProgramId",
-                        column: x => x.ProgramId,
-                        principalTable: "Programs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WorkoutPrograms_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Profiles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    ProgramId = table.Column<int>(type: "int", nullable: true),
-                    WorkoutId = table.Column<int>(type: "int", nullable: true),
-                    SetId = table.Column<int>(type: "int", nullable: true),
-                    Weight = table.Column<int>(type: "int", nullable: true),
-                    Height = table.Column<int>(type: "int", nullable: true),
-                    MedicalConditions = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Disabilities = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Profiles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Profiles_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Profiles_Programs_ProgramId",
-                        column: x => x.ProgramId,
-                        principalTable: "Programs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Profiles_Sets_SetId",
-                        column: x => x.SetId,
-                        principalTable: "Sets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Profiles_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkoutSets",
-                columns: table => new
-                {
-                    SetId = table.Column<int>(type: "int", nullable: false),
-                    WorkoutId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkoutSets", x => new { x.SetId, x.WorkoutId });
-                    table.ForeignKey(
-                        name: "FK_WorkoutSets_Sets_SetId",
-                        column: x => x.SetId,
-                        principalTable: "Sets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WorkoutSets_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,11 +116,60 @@ namespace MeFit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkoutPrograms",
+                columns: table => new
+                {
+                    ProgramId = table.Column<int>(type: "int", nullable: false),
+                    WorkoutId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutPrograms", x => new { x.ProgramId, x.WorkoutId });
+                    table.ForeignKey(
+                        name: "FK_WorkoutPrograms_Programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "Programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkoutPrograms_Workouts_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "Workouts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkoutSets",
+                columns: table => new
+                {
+                    SetId = table.Column<int>(type: "int", nullable: false),
+                    WorkoutId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutSets", x => new { x.SetId, x.WorkoutId });
+                    table.ForeignKey(
+                        name: "FK_WorkoutSets_Sets_SetId",
+                        column: x => x.SetId,
+                        principalTable: "Sets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkoutSets_Workouts_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "Workouts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkoutGoals",
                 columns: table => new
                 {
                     GoalId = table.Column<int>(type: "int", nullable: false),
-                    WorkoutId = table.Column<int>(type: "int", nullable: false)
+                    WorkoutId = table.Column<int>(type: "int", nullable: false),
+                    Completed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -235,15 +189,6 @@ namespace MeFit.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "Id", "AddressLine1", "AddressLine2", "AddressLine3", "City", "Contry", "PostalCode" },
-                values: new object[,]
-                {
-                    { 1, "Hans Nielsen Hauges Gate 10", null, null, "Trondheim", "Norway", "7067" },
-                    { 2, "Høgreina 18c", null, null, "Trondheim", "Norway", "7079" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Exercises",
                 columns: new[] { "Id", "Description", "ImageURL", "Name", "TargetMuscleGroup", "VideoURL" },
                 values: new object[,]
@@ -253,6 +198,11 @@ namespace MeFit.Migrations
                     { 3, "Chest strong", "img", "Push up", "upper body", ".mov" },
                     { 4, "Biceps strong", "img", "Isolation curl", "biceps", ".mov" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Profiles",
+                columns: new[] { "Id", "Disabilities", "Height", "MedicalConditions", "Weight" },
+                values: new object[] { "keycloak-uid", "none", 171, "Anxiety", 60 });
 
             migrationBuilder.InsertData(
                 table: "Programs",
@@ -266,12 +216,22 @@ namespace MeFit.Migrations
 
             migrationBuilder.InsertData(
                 table: "Workouts",
-                columns: new[] { "Id", "Complete", "Name", "Type" },
+                columns: new[] { "Id", "Name", "Type" },
                 values: new object[,]
                 {
-                    { 1, false, "Arm day", "Strength" },
-                    { 2, true, "Leg day", "Strength" },
-                    { 3, false, "Running", "Cardio" }
+                    { 1, "Arm day", "Strength" },
+                    { 2, "Leg day", "Strength" },
+                    { 3, "Running", "Cardio" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Goals",
+                columns: new[] { "Id", "Achieved", "ProfileId", "ProgramEndDate", "ProgramId" },
+                values: new object[,]
+                {
+                    { 1, false, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 647, DateTimeKind.Local).AddTicks(4375), 1 },
+                    { 2, true, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(562), 2 },
+                    { 3, true, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(705), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -295,9 +255,13 @@ namespace MeFit.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Profiles",
-                columns: new[] { "Id", "AddressId", "Disabilities", "Height", "MedicalConditions", "ProgramId", "SetId", "Weight", "WorkoutId" },
-                values: new object[] { "keycloak-uid", 1, "none", 171, "Anxiety", 1, 1, 60, 1 });
+                table: "WorkoutGoals",
+                columns: new[] { "GoalId", "WorkoutId", "Completed" },
+                values: new object[,]
+                {
+                    { 1, 1, false },
+                    { 2, 2, false }
+                });
 
             migrationBuilder.InsertData(
                 table: "WorkoutSets",
@@ -309,31 +273,6 @@ namespace MeFit.Migrations
                     { 2, 1 }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Goals",
-                columns: new[] { "Id", "Achieved", "ProfileId", "ProgramEndDate", "ProgramId" },
-                values: new object[] { 1, false, "keycloak-uid", new DateTime(2022, 3, 14, 13, 34, 40, 147, DateTimeKind.Local).AddTicks(2507), 1 });
-
-            migrationBuilder.InsertData(
-                table: "Goals",
-                columns: new[] { "Id", "Achieved", "ProfileId", "ProgramEndDate", "ProgramId" },
-                values: new object[] { 2, true, "keycloak-uid", new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3317), 2 });
-
-            migrationBuilder.InsertData(
-                table: "Goals",
-                columns: new[] { "Id", "Achieved", "ProfileId", "ProgramEndDate", "ProgramId" },
-                values: new object[] { 3, true, "keycloak-uid", new DateTime(2022, 3, 14, 13, 34, 40, 150, DateTimeKind.Local).AddTicks(3372), 2 });
-
-            migrationBuilder.InsertData(
-                table: "WorkoutGoals",
-                columns: new[] { "GoalId", "WorkoutId" },
-                values: new object[] { 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "WorkoutGoals",
-                columns: new[] { "GoalId", "WorkoutId" },
-                values: new object[] { 2, 2 });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Goals_ProfileId",
                 table: "Goals",
@@ -343,26 +282,6 @@ namespace MeFit.Migrations
                 name: "IX_Goals_ProgramId",
                 table: "Goals",
                 column: "ProgramId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Profiles_AddressId",
-                table: "Profiles",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Profiles_ProgramId",
-                table: "Profiles",
-                column: "ProgramId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Profiles_SetId",
-                table: "Profiles",
-                column: "SetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Profiles_WorkoutId",
-                table: "Profiles",
-                column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sets_ExerciseId",
@@ -400,19 +319,16 @@ namespace MeFit.Migrations
                 name: "Goals");
 
             migrationBuilder.DropTable(
-                name: "Profiles");
-
-            migrationBuilder.DropTable(
-                name: "Addresses");
-
-            migrationBuilder.DropTable(
-                name: "Programs");
-
-            migrationBuilder.DropTable(
                 name: "Sets");
 
             migrationBuilder.DropTable(
                 name: "Workouts");
+
+            migrationBuilder.DropTable(
+                name: "Profiles");
+
+            migrationBuilder.DropTable(
+                name: "Programs");
 
             migrationBuilder.DropTable(
                 name: "Exercises");

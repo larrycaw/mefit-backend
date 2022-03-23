@@ -10,7 +10,6 @@ namespace MeFit.Models.Domain
         public string Name { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
-        public bool Complete { get; set; }
         public ICollection<Set> Sets { get; set; }
         public ICollection<Goal> Goals { get; set; }
         public ICollection<MFProgram> Programs { get; set; }

@@ -104,8 +104,7 @@ namespace MeFit.Controllers
              }
              catch (DbUpdateConcurrencyException)
              {
-                 if (!ProfileExists(profile.Id) || !ProgramExists(profile.ProgramId) || !AddressExists(profile.AddressId)
-                     || !WorkoutExists(profile.WorkoutId) || !SetExists(profile.SetId))
+                 if (!ProfileExists(profile.Id))
                  {
                      return NotFound();
                  }
@@ -168,10 +167,6 @@ namespace MeFit.Controllers
              return _context.Programs.Any(p => p.Id == id);
          }
          
-         private bool AddressExists(int? id)
-         {
-             return _context.Addresses.Any(a => a.Id == id);
-         }
          
          private bool WorkoutExists(int? id)
          {
