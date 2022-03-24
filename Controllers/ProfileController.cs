@@ -10,6 +10,7 @@ using MeFit.Models.DTOs.Goal;
 using MeFit.Models.DTOs.Profile;
 using Profile = MeFit.Models.Domain.Profile;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeFit.Controllers
 {
@@ -36,6 +37,7 @@ namespace MeFit.Controllers
          /// </summary>
          /// <returns>List of profiles</returns>
          [HttpGet("all")]
+        [Authorize(Policy = "isAdministrator")]
         public async Task<ActionResult<IEnumerable<ProfileReadDTO>>> GetProfiles()
         {
             var profiles = _mapper.Map<List<ProfileReadDTO>>(await _context.Profiles.ToListAsync());
@@ -43,9 +45,15 @@ namespace MeFit.Controllers
          }
          
          [HttpGet]
-         public async Task<ActionResult<ProfileReadDTO>> GetProfile([FromHeader(Name = "id")] string id)
+        [Authorize(Policy = "isUser")]
+        public async Task<ActionResult<ProfileReadDTO>> GetProfile([FromHeader(Name = "id")] string id)
          {
-             var profile = _mapper.Map<ProfileReadDTO>(await _context.Profiles.FindAsync(id));
+            // Admin users can view all profiles, regular users can only get their profile
+
+            if (TokenUserId() != id && !IsAdmin())
+                return Forbid();
+
+            var profile = _mapper.Map<ProfileReadDTO>(await _context.Profiles.FindAsync(id));
              
              if (profile == null)
              {
@@ -63,9 +71,15 @@ namespace MeFit.Controllers
          /// <param name="profileDto">Profile to post</param>
          /// <returns>Newly created profile</returns>
          [HttpPost]
-         public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
+        [Authorize(Policy = "isUser")]
+        public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
          {
-             var profile = _mapper.Map<Profile>(profileDto);
+
+            // Only allow users to create profile for their own account
+            if (TokenUserId() != profileDto.Id)
+                return Forbid();
+
+            var profile = _mapper.Map<Profile>(profileDto);
              
              try
              {
@@ -90,9 +104,14 @@ namespace MeFit.Controllers
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
          [HttpPut]
-         public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO profile, [FromHeader(Name = "id")] string id)
+        [Authorize(Policy = "isUser")]
+        public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO profile, [FromHeader(Name = "id")] string id)
          {
-             if (profile.Id != id)
+            // Only allow users to edit their own profile
+            if (TokenUserId() != profile.Id)
+                return Forbid();
+
+            if (profile.Id != id)
                  return BadRequest();
              
              var domainProfile = _mapper.Map<Profile>(profile);
@@ -124,9 +143,15 @@ namespace MeFit.Controllers
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
          [HttpDelete("delete")]
-         public async Task<IActionResult> DeleteProfile([FromHeader(Name = "id")] string id)
+        [Authorize(Policy = "isUser")]
+        public async Task<IActionResult> DeleteProfile([FromHeader(Name = "id")] string id)
          {
-             var profile = await _context.Profiles.FindAsync(id);
+            // Only allow users to delete their own profile
+            if (TokenUserId() != id)
+                return Forbid();
+
+            var profile = await _context.Profiles.FindAsync(id);
+
              if (profile == null)
              {
                  return NotFound();
@@ -146,8 +171,13 @@ namespace MeFit.Controllers
          /// <param name="userId">User ID</param>
          /// <returns>Current goal</returns>
          [HttpGet("currentGoal")]
-         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
+        [Authorize(Policy = "isUser")]
+        public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
          {
+            // Admin users can view goals of other users, regular users can only get their own
+            if (TokenUserId() != userId && !IsAdmin())
+                return Forbid();
+
              var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals
                  .Include(g => g.WorkoutGoals).Where(g => g.ProfileId == userId)
                  .Where(g => g.Achieved == false).FirstOrDefaultAsync());
@@ -177,5 +207,15 @@ namespace MeFit.Controllers
          {
              return _context.Sets.Any(s => s.Id == id);
          }
+
+        private string TokenUserId()
+        {
+            return HttpContext.User.Claims.ToList().Find(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+        }
+
+        private bool IsAdmin()
+        {
+            return HttpContext.User.Claims.ToList().Exists(x => x.Type == "user_role" && x.Value == "Admin");
+        }
     }
 }
