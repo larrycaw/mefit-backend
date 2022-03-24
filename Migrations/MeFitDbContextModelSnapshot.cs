@@ -122,7 +122,7 @@ namespace MeFit.Migrations
                             Id = 1,
                             Achieved = false,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 647, DateTimeKind.Local).AddTicks(4375),
+                            ProgramEndDate = new DateTime(2022, 3, 24, 9, 26, 44, 291, DateTimeKind.Local).AddTicks(9924),
                             ProgramId = 1
                         },
                         new
@@ -130,7 +130,7 @@ namespace MeFit.Migrations
                             Id = 2,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(562),
+                            ProgramEndDate = new DateTime(2022, 3, 24, 9, 26, 44, 294, DateTimeKind.Local).AddTicks(7363),
                             ProgramId = 2
                         },
                         new
@@ -138,8 +138,40 @@ namespace MeFit.Migrations
                             Id = 3,
                             Achieved = true,
                             ProfileId = "keycloak-uid",
-                            ProgramEndDate = new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(705),
+                            ProgramEndDate = new DateTime(2022, 3, 24, 9, 26, 44, 294, DateTimeKind.Local).AddTicks(7412),
                             ProgramId = 2
+                        });
+                });
+
+            modelBuilder.Entity("MeFit.Models.Domain.GoalWorkouts", b =>
+                {
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.HasKey("WorkoutId", "GoalId");
+
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("GoalWorkouts");
+
+                    b.HasData(
+                        new
+                        {
+                            WorkoutId = 1,
+                            GoalId = 1,
+                            Completed = false
+                        },
+                        new
+                        {
+                            WorkoutId = 2,
+                            GoalId = 2,
+                            Completed = false
                         });
                 });
 
@@ -291,38 +323,6 @@ namespace MeFit.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WorkoutGoals", b =>
-                {
-                    b.Property<int>("GoalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkoutId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("bit");
-
-                    b.HasKey("GoalId", "WorkoutId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("WorkoutGoals");
-
-                    b.HasData(
-                        new
-                        {
-                            GoalId = 1,
-                            WorkoutId = 1,
-                            Completed = false
-                        },
-                        new
-                        {
-                            GoalId = 2,
-                            WorkoutId = 2,
-                            Completed = false
-                        });
-                });
-
             modelBuilder.Entity("WorkoutPrograms", b =>
                 {
                     b.Property<int>("ProgramId")
@@ -407,6 +407,25 @@ namespace MeFit.Migrations
                     b.Navigation("Program");
                 });
 
+            modelBuilder.Entity("MeFit.Models.Domain.GoalWorkouts", b =>
+                {
+                    b.HasOne("MeFit.Models.Domain.Goal", "Goal")
+                        .WithMany("WorkoutGoals")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeFit.Models.Domain.Workout", "Workout")
+                        .WithMany("WorkoutGoals")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Goal");
+
+                    b.Navigation("Workout");
+                });
+
             modelBuilder.Entity("MeFit.Models.Domain.Set", b =>
                 {
                     b.HasOne("MeFit.Models.Domain.Exercise", "Exercise")
@@ -414,21 +433,6 @@ namespace MeFit.Migrations
                         .HasForeignKey("ExerciseId");
 
                     b.Navigation("Exercise");
-                });
-
-            modelBuilder.Entity("WorkoutGoals", b =>
-                {
-                    b.HasOne("MeFit.Models.Domain.Goal", null)
-                        .WithMany()
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MeFit.Models.Domain.Workout", null)
-                        .WithMany()
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkoutPrograms", b =>
@@ -459,6 +463,16 @@ namespace MeFit.Migrations
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MeFit.Models.Domain.Goal", b =>
+                {
+                    b.Navigation("WorkoutGoals");
+                });
+
+            modelBuilder.Entity("MeFit.Models.Domain.Workout", b =>
+                {
+                    b.Navigation("WorkoutGoals");
                 });
 #pragma warning restore 612, 618
         }

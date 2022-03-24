@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MeFit.Models.DTOs.WorkoutGoals;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MeFit.Models.DTOs.Workout
@@ -11,7 +12,7 @@ namespace MeFit.Models.DTOs.Workout
         [MaxLength(50)]
         public string Type { get; set; }
         public List<int> Sets { get; set; }
-        public List<int> Goals { get; set; }
+        public List<WorkoutGoalsReadDTO> WorkoutGoals { get; set; }
         public List<int> Programs { get; set; }
 
     }

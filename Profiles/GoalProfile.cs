@@ -9,15 +9,9 @@ namespace MeFit.Profiles
     {
         public GoalProfile()
         {
-            CreateMap<models.Goal, GoalReadDTO>()
-                .ForMember(gdto => gdto.Workouts, opt =>
-                opt.MapFrom(g => g.Workouts.Select(w => w.Id).ToArray()))
-                .ReverseMap();
+            CreateMap<models.Goal, GoalReadDTO>().ReverseMap();
 
-            CreateMap<models.Goal, GoalByUserDTO>()
-                .ForMember(gdto => gdto.Workouts, opt =>
-                opt.MapFrom(g => g.Workouts.Select(w => w.Id).ToArray()))
-                .ReverseMap();
+            CreateMap<models.Goal, GoalByUserDTO>().ReverseMap();
 
             CreateMap<models.Goal, GoalCreateDTO>().ReverseMap();
             CreateMap<models.Goal, GoalEditDTO>().ReverseMap();

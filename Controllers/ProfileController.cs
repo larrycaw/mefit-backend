@@ -149,7 +149,7 @@ namespace MeFit.Controllers
          public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
          {
              var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals
-                 .Include(g => g.Workouts).Where(g => g.ProfileId == userId)
+                 .Include(g => g.WorkoutGoals).Where(g => g.ProfileId == userId)
                  .Where(g => g.Achieved == false).FirstOrDefaultAsync());
              
              if (currentGoal == null)

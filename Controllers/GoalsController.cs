@@ -10,6 +10,7 @@ using MeFit.Models.Domain;
 using AutoMapper;
 using MeFit.Models.DTOs.Goal;
 using System.Net.Mime;
+using MeFit.Models.DTOs.WorkoutGoals;
 
 namespace MeFit.Controllers
 {
@@ -39,7 +40,7 @@ namespace MeFit.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<GoalReadDTO>>> GetGoals()
         {
-            var goals = _mapper.Map<List<GoalReadDTO>>(await _context.Goals.Include(g => g.Workouts).ToListAsync());
+            var goals = _mapper.Map<List<GoalReadDTO>>(await _context.Goals.Include(g => g.WorkoutGoals).ToListAsync());
             return Ok(goals);
         }
 
@@ -53,7 +54,7 @@ namespace MeFit.Controllers
         [HttpGet]
         public async Task<ActionResult<GoalReadDTO>> GetGoal([FromHeader(Name = "id")] int id)
         {
-            var goal = _mapper.Map<GoalReadDTO>(await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == id));
+            var goal = _mapper.Map<GoalReadDTO>(await _context.Goals.Include(g => g.WorkoutGoals).FirstOrDefaultAsync(g => g.Id == id));
 
             if (goal == null)
             {
@@ -73,7 +74,7 @@ namespace MeFit.Controllers
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<GoalByUserDTO>>> GetUserGoals([FromHeader(Name = "userId")] string userId)
         {
-            var goals = _mapper.Map<List<GoalByUserDTO>>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == userId).ToListAsync());
+            var goals = _mapper.Map<List<GoalByUserDTO>>(await _context.Goals.Include(g => g.WorkoutGoals).Where(g => g.ProfileId == userId).ToListAsync());
             return Ok(goals);
         }
 
@@ -87,7 +88,7 @@ namespace MeFit.Controllers
         [HttpGet("currentGoal")]
         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
         {
-            var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == userId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
+            var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.WorkoutGoals).Where(g => g.ProfileId == userId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
 
             if (currentGoal == null)
                 return NotFound();
@@ -127,7 +128,7 @@ namespace MeFit.Controllers
         public async Task<ActionResult<GoalReadDTO>> PostGoal([FromBody] GoalCreateDTO goalDto)
         {
             // Check if user already has an active goal
-            var activeGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.Workouts).Where(g => g.ProfileId == goalDto.ProfileId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
+            var activeGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals.Include(g => g.WorkoutGoals).Where(g => g.ProfileId == goalDto.ProfileId).Where(g => g.Achieved == false).FirstOrDefaultAsync());
 
             // User cannot add new goal if it already has an active goal
             if (activeGoal != null)
@@ -159,11 +160,11 @@ namespace MeFit.Controllers
         public async Task<ActionResult> AssignWorkoutToGoal([FromBody] List<int> Workouts, [FromHeader(Name = "GoalID")] int goalId)
         {
 
-            var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
+            var goal = await _context.Goals.Include(g => g.WorkoutGoals).FirstOrDefaultAsync(g => g.Id == goalId);
 
-            foreach(var workout in goal.Workouts)
+            foreach(var workout in goal.WorkoutGoals)
             {
-                goal.Workouts.Remove(workout);
+                goal.WorkoutGoals.Remove(workout);
             }
 
             if (goal == null)
@@ -176,7 +177,9 @@ namespace MeFit.Controllers
                 var tempWorkout = await _context.Workouts.FirstOrDefaultAsync(w => w.Id == workoutId);
                 if (tempWorkout != null)
                 {
-                    goal.Workouts.Add(tempWorkout);
+                    var addedGoal = _mapper.Map<GoalWorkouts>(tempWorkout);
+
+                    goal.WorkoutGoals.Add(addedGoal);
                 }
             }
 
@@ -193,7 +196,7 @@ namespace MeFit.Controllers
         [HttpPut("assignProgram")]
         public async Task<ActionResult> AssignProgramToGoal([FromBody] int programId, [FromHeader(Name = "GoalID")] int goalId)
         {
-            var goal = await _context.Goals.Include(g => g.Workouts).FirstOrDefaultAsync(g => g.Id == goalId);
+            var goal = await _context.Goals.Include(g => g.WorkoutGoals).FirstOrDefaultAsync(g => g.Id == goalId);
 
             if (goal == null)
             {
