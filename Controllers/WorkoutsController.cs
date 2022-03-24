@@ -41,7 +41,7 @@ namespace MeFit.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<WorkoutReadDTO>>> GetAllWorkouts()
         {
-            var workouts = _mapper.Map<List<WorkoutReadDTO>>(await _context.Workouts.Include(w =>  w.Programs).Include(w => w.Sets).Include(w => w.Goals).ToListAsync());
+            var workouts = _mapper.Map<List<WorkoutReadDTO>>(await _context.Workouts.Include(w =>  w.Programs).Include(w => w.Sets).Include(w => w.WorkoutGoals).ToListAsync());
             return Ok(workouts);
         }
 
@@ -55,7 +55,7 @@ namespace MeFit.Controllers
         [HttpGet]
         public async Task<ActionResult<WorkoutReadDTO>> GetWorkoutById([FromHeader(Name = "id")]int id)
         {
-            var workout = _mapper.Map<WorkoutReadDTO>( await _context.Workouts.Include(w => w.Programs).Include(w => w.Sets).Include(w => w.Goals).Where(w => w.Id == id).FirstAsync());
+            var workout = _mapper.Map<WorkoutReadDTO>( await _context.Workouts.Include(w => w.Programs).Include(w => w.Sets).Include(w => w.WorkoutGoals).Where(w => w.Id == id).FirstAsync());
 
             if (workout == null)
             {

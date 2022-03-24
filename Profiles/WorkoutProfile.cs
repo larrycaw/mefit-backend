@@ -16,8 +16,6 @@ namespace MeFit.Profiles
             CreateMap<models.Workout, WorkoutReadDTO>()
                 .ForMember(mdto => mdto.Sets, opt =>
                 opt.MapFrom(m => m.Sets.Select(c => c.Id).ToArray()))
-                .ForMember(mdto => mdto.Goals, opt =>
-                opt.MapFrom(m => m.Goals.Select(c => c.Id).ToArray()))
                 .ForMember(mdto => mdto.Programs, opt =>
                 opt.MapFrom(m => m.Programs.Select(c => c.Id).ToArray()))
                 .ReverseMap();

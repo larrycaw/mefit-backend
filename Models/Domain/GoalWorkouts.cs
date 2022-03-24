@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MeFit.Models.Domain
 {
     [Keyless]
-    public class WorkoutGoal
+    public class GoalWorkouts
     {
         [ForeignKey("WorkoutId")]
         public int WorkoutId { get; set; }

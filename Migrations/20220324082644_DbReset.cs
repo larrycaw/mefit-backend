@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MeFit.Migrations
 {
-    public partial class ReBootDB : Migration
+    public partial class DbReset : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -106,13 +106,13 @@ namespace MeFit.Migrations
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Goals_Programs_ProgramId",
                         column: x => x.ProgramId,
                         principalTable: "Programs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,24 +164,24 @@ namespace MeFit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkoutGoals",
+                name: "GoalWorkouts",
                 columns: table => new
                 {
-                    GoalId = table.Column<int>(type: "int", nullable: false),
                     WorkoutId = table.Column<int>(type: "int", nullable: false),
+                    GoalId = table.Column<int>(type: "int", nullable: false),
                     Completed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkoutGoals", x => new { x.GoalId, x.WorkoutId });
+                    table.PrimaryKey("PK_GoalWorkouts", x => new { x.WorkoutId, x.GoalId });
                     table.ForeignKey(
-                        name: "FK_WorkoutGoals_Goals_GoalId",
+                        name: "FK_GoalWorkouts_Goals_GoalId",
                         column: x => x.GoalId,
                         principalTable: "Goals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkoutGoals_Workouts_WorkoutId",
+                        name: "FK_GoalWorkouts_Workouts_WorkoutId",
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id",
@@ -229,9 +229,9 @@ namespace MeFit.Migrations
                 columns: new[] { "Id", "Achieved", "ProfileId", "ProgramEndDate", "ProgramId" },
                 values: new object[,]
                 {
-                    { 1, false, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 647, DateTimeKind.Local).AddTicks(4375), 1 },
-                    { 2, true, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(562), 2 },
-                    { 3, true, "keycloak-uid", new DateTime(2022, 3, 23, 10, 52, 26, 655, DateTimeKind.Local).AddTicks(705), 2 }
+                    { 1, false, "keycloak-uid", new DateTime(2022, 3, 24, 9, 26, 44, 291, DateTimeKind.Local).AddTicks(9924), 1 },
+                    { 2, true, "keycloak-uid", new DateTime(2022, 3, 24, 9, 26, 44, 294, DateTimeKind.Local).AddTicks(7363), 2 },
+                    { 3, true, "keycloak-uid", new DateTime(2022, 3, 24, 9, 26, 44, 294, DateTimeKind.Local).AddTicks(7412), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -255,7 +255,7 @@ namespace MeFit.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "WorkoutGoals",
+                table: "GoalWorkouts",
                 columns: new[] { "GoalId", "WorkoutId", "Completed" },
                 values: new object[,]
                 {
@@ -284,14 +284,14 @@ namespace MeFit.Migrations
                 column: "ProgramId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GoalWorkouts_GoalId",
+                table: "GoalWorkouts",
+                column: "GoalId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sets_ExerciseId",
                 table: "Sets",
                 column: "ExerciseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkoutGoals_WorkoutId",
-                table: "WorkoutGoals",
-                column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutPrograms_WorkoutId",
@@ -307,7 +307,7 @@ namespace MeFit.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "WorkoutGoals");
+                name: "GoalWorkouts");
 
             migrationBuilder.DropTable(
                 name: "WorkoutPrograms");

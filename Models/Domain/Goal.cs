@@ -11,8 +11,10 @@ namespace MeFit.Models.Domain
         public bool Achieved { get; set; }
         public int? ProgramId { get; set; }
         public MFProgram Program { get; set; }
-        public ICollection<Workout> Workouts { get; set; }
+        //public ICollection<Workout> Workouts { get; set; }
         public string ProfileId { get; set; }
         public Profile Profile { get; set; }
+        public virtual ICollection<GoalWorkouts> WorkoutGoals { get; set; }
+
     }
 }
