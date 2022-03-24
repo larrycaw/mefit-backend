@@ -43,7 +43,7 @@ namespace MeFit.Controllers
         [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<WorkoutReadDTO>>> GetAllWorkouts()
         {
-            var workouts = _mapper.Map<List<WorkoutReadDTO>>(await _context.Workouts.Include(w =>  w.Programs).Include(w => w.Sets).Include(w => w.Goals).ToListAsync());
+            var workouts = _mapper.Map<List<WorkoutReadDTO>>(await _context.Workouts.Include(w =>  w.Programs).Include(w => w.Sets).Include(w => w.WorkoutGoals).ToListAsync());
             return Ok(workouts);
         }
 
@@ -58,7 +58,7 @@ namespace MeFit.Controllers
         [Authorize(Policy = "isUser")]
         public async Task<ActionResult<WorkoutReadDTO>> GetWorkoutById([FromHeader(Name = "id")]int id)
         {
-            var workout = _mapper.Map<WorkoutReadDTO>( await _context.Workouts.Include(w => w.Programs).Include(w => w.Sets).Include(w => w.Goals).Where(w => w.Id == id).FirstAsync());
+            var workout = _mapper.Map<WorkoutReadDTO>( await _context.Workouts.Include(w => w.Programs).Include(w => w.Sets).Include(w => w.WorkoutGoals).Where(w => w.Id == id).FirstAsync());
 
             if (workout == null)
             {
@@ -169,13 +169,67 @@ namespace MeFit.Controllers
         /// <returns>HTTP response code</returns>
         [HttpPut("assignSets")]
         [Authorize(Policy = "isUser")]
-        public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, int id)
+        public async Task<IActionResult> AssigneSets([FromBody] List<int> sets, [FromHeader(Name = "id")] int id)
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
 
             foreach (var set in workout.Sets)
             {
                 workout.Sets.Remove(set);
+            }
+
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var setId in sets)
+            {
+                var tempSet = await _context.Sets.FirstOrDefaultAsync(w => w.Id == setId);
+                if (tempSet != null)
+                {
+                    workout.Sets.Add(tempSet);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Assign sets to a workout by exercise id's
+        /// 
+        /// PUT api/Workouts/assignSetsByExercise
+        /// </summary>
+        /// <param name="exercises">List of exercise id's</param>
+        /// <param name="id">Workout id</param>
+        /// <returns></returns>
+        [HttpPut("assignSetsByExercise")]
+        public async Task<IActionResult> AssigneSetsByExercise([FromBody] List<int> exercises, [FromHeader(Name = "id")] int id)
+        {
+            var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
+
+            foreach (var set in workout.Sets)
+            {
+                workout.Sets.Remove(set);
+            }
+
+            List<int> sets = new List<int>();
+            foreach (var exercise in exercises)
+            {
+                var query =
+                    from s in _context.Sets
+                    where s.ExerciseId == exercise
+                    select s.Id;
+
+                if(query != null)
+                {
+                    var qList = query.ToList();
+                    foreach (var setId in qList)
+                    {
+                        sets.Add(setId);
+                    }
+                }
             }
 
             if (workout == null)

@@ -123,8 +123,7 @@ namespace MeFit.Controllers
              }
              catch (DbUpdateConcurrencyException)
              {
-                 if (!ProfileExists(profile.Id) || !ProgramExists(profile.ProgramId) || !AddressExists(profile.AddressId)
-                     || !WorkoutExists(profile.WorkoutId) || !SetExists(profile.SetId))
+                 if (!ProfileExists(profile.Id))
                  {
                      return NotFound();
                  }
@@ -179,8 +178,8 @@ namespace MeFit.Controllers
             if (TokenUserId() != userId && !IsAdmin())
                 return Forbid();
 
-            var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals
-                 .Include(g => g.Workouts).Where(g => g.ProfileId == userId)
+             var currentGoal = _mapper.Map<GoalByUserDTO>(await _context.Goals
+                 .Include(g => g.WorkoutGoals).Where(g => g.ProfileId == userId)
                  .Where(g => g.Achieved == false).FirstOrDefaultAsync());
              
              if (currentGoal == null)
@@ -198,10 +197,6 @@ namespace MeFit.Controllers
              return _context.Programs.Any(p => p.Id == id);
          }
          
-         private bool AddressExists(int? id)
-         {
-             return _context.Addresses.Any(a => a.Id == id);
-         }
          
          private bool WorkoutExists(int? id)
          {

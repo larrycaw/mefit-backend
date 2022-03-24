@@ -91,7 +91,7 @@ namespace MeFit.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            var newSet = _mapper.Map<SetCreateDTO>(set);
+            var newSet = _mapper.Map<SetReadDTO>(set);
 
             return CreatedAtAction("GetSetById", new { Id = set.Id }, newSet);
         }

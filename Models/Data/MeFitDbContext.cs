@@ -8,13 +8,13 @@ namespace MeFit.Models.Data
 {
     public class MeFitDbContext : DbContext
     {
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<MFProgram> Programs { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<GoalWorkouts> GoalWorkouts { get; set; }
 
         public MeFitDbContext([NotNullAttribute] DbContextOptions options) : base(options)
         {
@@ -80,24 +80,21 @@ namespace MeFit.Models.Data
             {
                 Id = 1,
                 Name = "Arm day",
-                Type = "Strength",
-                Complete = false
+                Type = "Strength"
             });
 
             modelBuilder.Entity<Workout>().HasData(new Workout
             {
                 Id = 2,
                 Name = "Leg day",
-                Type = "Strength",
-                Complete = true
+                Type = "Strength"
             });
 
             modelBuilder.Entity<Workout>().HasData(new Workout
             {
                 Id = 3,
                 Name = "Running",
-                Type = "Cardio",
-                Complete = false
+                Type = "Cardio"
             });
 
             modelBuilder.Entity<MFProgram>().HasData(new MFProgram
@@ -151,36 +148,39 @@ namespace MeFit.Models.Data
             modelBuilder.Entity<Profile>().HasData(new Profile
             {
                 Id = "keycloak-uid",
-                AddressId = 1,
-                ProgramId = 1,
-                WorkoutId = 1,
-                SetId = 1,
                 Weight = 60,
                 Height = 171,
                 MedicalConditions = "Anxiety",
                 Disabilities = "none"
             });
 
-            modelBuilder.Entity<Address>().HasData(new Address
+
+            modelBuilder.Entity<GoalWorkouts>()
+                .HasKey(wg => new { wg.WorkoutId, wg.GoalId });
+            modelBuilder.Entity<GoalWorkouts>()
+                .Property<bool>("Completed");
+            modelBuilder.Entity<GoalWorkouts>()
+                .HasOne(wg => wg.Workout)
+                .WithMany(w => w.WorkoutGoals)
+                .HasForeignKey(wg => wg.WorkoutId);
+            modelBuilder.Entity<GoalWorkouts>()
+                .HasOne(wg => wg.Goal)
+                .WithMany(g => g.WorkoutGoals)
+                .HasForeignKey(wg => wg.GoalId);
+
+
+            modelBuilder.Entity<GoalWorkouts>().HasData(new GoalWorkouts
             {
-                Id = 1,
-                AddressLine1 = "Hans Nielsen Hauges Gate 10",
-                AddressLine2 = null,
-                AddressLine3 = null,
-                City =  "Trondheim",
-                PostalCode = "7067",
-                Contry = "Norway"
+                Completed = false,
+                WorkoutId = 1,
+                GoalId = 1,
             });
 
-            modelBuilder.Entity<Address>().HasData(new Address
+            modelBuilder.Entity<GoalWorkouts>().HasData(new GoalWorkouts
             {
-                Id = 2,
-                AddressLine1 = "Høgreina 18c",
-                AddressLine2 = null,
-                AddressLine3 = null,
-                City = "Trondheim",
-                PostalCode = "7079",
-                Contry = "Norway"
+                Completed = false,
+                WorkoutId = 2,
+                GoalId = 2,
             });
 
             modelBuilder.Entity<Workout>()
@@ -200,21 +200,28 @@ namespace MeFit.Models.Data
                         );
                     });
 
-            modelBuilder.Entity<Workout>()
-                .HasMany(g => g.Goals)
-                .WithMany(w => w.Workouts)
-                .UsingEntity<Dictionary<string, object>>(
-                    "WorkoutGoals",
-                    r => r.HasOne<Goal>().WithMany().HasForeignKey("GoalId"),
-                    l => l.HasOne<Workout>().WithMany().HasForeignKey("WorkoutId"),
-                    je =>
-                    {
-                        je.HasKey("GoalId", "WorkoutId");
-                        je.HasData(
-                            new { WorkoutId = 1, GoalId = 1 },
-                            new { WorkoutId = 2, GoalId = 2 }
-                        );
-                    });
+
+            //modelBuilder.Entity<Workout>()
+            //    .HasMany(g => g.Goals)
+            //    .WithMany(w => w.Workouts)
+            //    .UsingEntity<GoalWorkouts>("WorkoutGoals", GoalWorkouts);
+
+            //modelBuilder.Entity<Workout>()
+            //    .HasMany(g => g.Goals)
+            //    .WithMany(w => w.Workouts)
+            //    .UsingEntity<Dictionary<string, object>>(
+            //        "WorkoutGoals",
+            //        r => r.HasOne<Goal>().WithMany().HasForeignKey("GoalId"),
+            //        l => l.HasOne<Workout>().WithMany().HasForeignKey("WorkoutId"),
+            //        je =>
+            //        {
+            //            je.HasKey("GoalId", "WorkoutId");
+            //            je.Property<bool>("Completed");
+            //            je.HasData(
+            //                new { WorkoutId = 1, GoalId = 1, Completed = false },
+            //                new { WorkoutId = 2, GoalId = 2, Completed = false }
+            //            );
+            //        });
 
             modelBuilder.Entity<Workout>()
                 .HasMany(p => p.Programs)

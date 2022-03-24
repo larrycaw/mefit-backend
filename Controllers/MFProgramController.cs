@@ -164,16 +164,17 @@ namespace MeFit.Controllers
         /// <returns>HTTP response code</returns>
         [HttpPost("assignWorkouts")]
         [Authorize(Policy = "isContributor")]
-        public async Task<IActionResult> AssigneWorkouts([FromBody] List<int> workouts, int id)
+        public async Task<IActionResult> AssigneWorkouts([FromBody] List<int> workouts, [FromHeader(Name = "id")] int id)
         {
             var program = await _context.Programs.Include(p => p.Workouts).FirstOrDefaultAsync(p => p.Id == id);
+
 
             foreach (var wokrout in program.Workouts)
             {
                 program.Workouts.Remove(wokrout);
             }
-            
-            if(program == null)
+
+            if (program == null)
             {
                 return NotFound();
             }
