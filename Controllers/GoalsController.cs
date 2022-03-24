@@ -194,10 +194,10 @@ namespace MeFit.Controllers
                 return NotFound();
             }
 
-            foreach (var workout in goal.Workouts)
-            {
-                goal.WorkoutsGoals.Remove(workout);
-            }
+            //foreach (var workout in goal.Workouts)
+            //{
+            //    goal.WorkoutsGoals.Remove(workout);
+            //}
 
             foreach (var workoutId in Workouts)
             {
