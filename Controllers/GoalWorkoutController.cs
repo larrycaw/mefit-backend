@@ -31,7 +31,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all WorkoutGoals
-        /// 
         /// </summary>
         /// <returns>List of WorkoutGoals</returns>
         [HttpGet("all")]
@@ -43,9 +42,9 @@ namespace MeFit.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Gets a goal by goal ID
         /// </summary>
-        /// <param name="goalId"></param>
+        /// <param name="goalId">Goal ID</param>
         /// <returns></returns>
         [HttpGet("byGoalId")]
         [Authorize(Policy = "isUser")]
@@ -57,7 +56,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Create a new link between goal and workout.
-        /// 
         /// </summary>
         /// <param name="WorkoutGoals">The new workout goal</param>
         /// <returns></returns>
@@ -81,6 +79,13 @@ namespace MeFit.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Updates a workout goal
+        /// </summary>
+        /// <param name="goalId">Goal ID</param>
+        /// <param name="workoutId">Workout ID</param>
+        /// <param name="workoutGoal">Workout Edit DTO (see schema)</param>
+        /// <returns></returns>
         [HttpPut("update")]
         [Authorize(Policy = "isUser")]
         public async Task<IActionResult> UpdateWorkoutGoal([FromHeader(Name = "goalId")] int goalId, [FromHeader(Name = "workoutId")] int workoutId, [FromBody] WorkoutGoalsEditDTO workoutGoal)

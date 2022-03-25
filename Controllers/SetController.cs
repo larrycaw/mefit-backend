@@ -33,8 +33,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all sets.
-        /// 
-        /// GET: api/Set/all
         /// </summary>
         /// <returns>List of sets</returns>
         [HttpGet("all")]
@@ -47,8 +45,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Get set by id.
-        /// 
-        /// GET: api/Set
         /// </summary>
         /// <param name="id">Set id</param>
         /// <returns>Set</returns>
@@ -69,8 +65,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Posts a new set.
-        /// 
-        /// POST: api/Set
         /// </summary>
         /// <param name="setDto">Set to post</param>
         /// <returns>Newly created set</returns>
@@ -98,8 +92,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Delete a set by id.
-        /// 
-        /// DELETE: api/Set/delete
         /// </summary>
         /// <param name="id">Set id</param>
         /// <returns>HTTP response code</returns>
@@ -121,8 +113,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Updates a set.
-        /// 
-        /// PUT: api/Set/updateSet
         /// </summary>
         /// <param name="id">Set id</param>
         /// <param name="setDto">New set info</param>

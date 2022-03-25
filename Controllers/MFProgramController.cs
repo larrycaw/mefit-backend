@@ -34,8 +34,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all programs.
-        /// 
-        /// GET: api/MFProgram/all
         /// </summary>
         /// <returns>List of programs</returns>
         [HttpGet("all")]
@@ -48,8 +46,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Get program by id.
-        /// 
-        /// GET: api/MFProgram
         /// </summary>
         /// <param name="id">Program id</param>
         /// <returns>Program</returns>
@@ -70,8 +66,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Posts a new program. Does not assign workouts.
-        /// 
-        /// POST: api/MFProgram
         /// </summary>
         /// <param name="programDto">Program to post</param>
         /// <returns>Newly created program</returns>
@@ -98,8 +92,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Delete a program by id.
-        /// 
-        /// DELETE: api/MFProgram/delete
         /// </summary>
         /// <param name="id">Program id</param>
         /// <returns>HTTP response code</returns>
@@ -121,8 +113,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Updates a program. Does not assign workouts.
-        /// 
-        /// PUT: api/MFProgram/updateProgram
         /// </summary>
         /// <param name="id">Program id</param>
         /// <param name="programOtd">New program info</param>
@@ -191,9 +181,6 @@ namespace MeFit.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-
-
         private bool ProgramExist(int id)
         {
             return _context.Programs.Any(e => e.Id == id);

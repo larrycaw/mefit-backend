@@ -32,8 +32,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all exercises
-        /// 
-        /// GET: api/Exercises/all
         /// </summary>
         /// <returns>List of exercises</returns>
         [HttpGet("all")]
@@ -46,8 +44,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets exercise given exercise ID
-        /// 
-        /// GET: api/Exercises
         /// </summary>
         /// <param name="id">Exercise ID</param>
         /// <returns>Exercise</returns>
@@ -67,8 +63,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Updates exercise
-        /// 
-        /// PUT: api/Exercises
         /// </summary>
         /// <param name="exercise">Exercise object</param>
         /// <param name="id">Exercise ID</param>
@@ -105,8 +99,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Posts exercise
-        /// 
-        /// POST: api/Exercises
         /// </summary>
         /// <param name="exerciseDto">Exercise to post</param>
         /// <returns>Newly created exercise</returns>
@@ -132,8 +124,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Deletes exercise
-        /// 
-        /// DELETE: api/Exercises/delete
         /// </summary>
         /// <param name="id">Exercise ID</param>
         /// <returns>HTTP response code</returns>

@@ -32,11 +32,9 @@ namespace MeFit.Controllers
         
         /// <summary>
          /// Gets all profiles
-         /// 
-         /// GET: api/Profile/all
          /// </summary>
          /// <returns>List of profiles</returns>
-         [HttpGet("all")]
+        [HttpGet("all")]
         [Authorize(Policy = "isAdministrator")]
         public async Task<ActionResult<IEnumerable<ProfileReadDTO>>> GetProfiles()
         {
@@ -44,7 +42,12 @@ namespace MeFit.Controllers
             return Ok(profiles);
          }
          
-         [HttpGet]
+        /// <summary>
+        /// Gets a user profile
+        /// </summary>
+        /// <param name="id">User ID</param>
+        /// <returns></returns>
+        [HttpGet]
         [Authorize(Policy = "isUser")]
         public async Task<ActionResult<ProfileReadDTO>> GetProfile([FromHeader(Name = "id")] string id)
          {
@@ -65,12 +68,10 @@ namespace MeFit.Controllers
          
          /// <summary>
          /// Posts profile
-         /// 
-         /// POST: api/Profile
          /// </summary>
          /// <param name="profileDto">Profile to post</param>
          /// <returns>Newly created profile</returns>
-         [HttpPost]
+        [HttpPost]
         [Authorize(Policy = "isUser")]
         public async Task<ActionResult<ProfileReadDTO>> PostProfile([FromBody] ProfileCreateDTO profileDto)
          {
@@ -97,13 +98,11 @@ namespace MeFit.Controllers
          
          /// <summary>
          /// Updates profile
-         /// 
-         /// PUT: api/Profile
          /// </summary>
          /// <param name="profile">Profile object</param>
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
-         [HttpPut]
+        [HttpPut]
         [Authorize(Policy = "isUser")]
         public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO profile, [FromHeader(Name = "id")] string id)
          {
@@ -137,12 +136,10 @@ namespace MeFit.Controllers
          
          /// <summary>
          /// Deletes profile
-         /// 
-         /// DELETE: api/Profile/delete
          /// </summary>
          /// <param name="id">Profile ID</param>
          /// <returns>HTTP response code</returns>
-         [HttpDelete("delete")]
+        [HttpDelete("delete")]
         [Authorize(Policy = "isUser")]
         public async Task<IActionResult> DeleteProfile([FromHeader(Name = "id")] string id)
          {
@@ -165,12 +162,10 @@ namespace MeFit.Controllers
          
          /// <summary>
          /// Gets user's current unfinished goal
-         /// 
-         /// GET: api/Goals/CurrentGoal
          /// </summary>
          /// <param name="userId">User ID</param>
          /// <returns>Current goal</returns>
-         [HttpGet("currentGoal")]
+        [HttpGet("currentGoal")]
         [Authorize(Policy = "isUser")]
         public async Task<ActionResult<GoalByUserDTO>> GetCurrentUserGoal([FromHeader(Name = "userId")] string userId)
          {
