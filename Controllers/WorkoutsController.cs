@@ -35,8 +35,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Get all workouts.
-        /// 
-        /// GET: api/Workouts/all
         /// </summary>
         /// <returns>List of workouts</returns>
         [HttpGet("all")]
@@ -49,8 +47,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Get workout by id.
-        /// 
-        /// GET: api/Workouts
         /// </summary>
         /// <param name="id">Workout id</param>
         /// <returns>A workout</returns>
@@ -72,8 +68,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Post a new workout. Does not assign sets.
-        /// 
-        /// POST: api/Workouts
         /// </summary>
         /// <param name="workoutDTO">Info to create a new workout</param>
         /// <returns>Newly added workout</returns>
@@ -100,8 +94,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Delete a workout by id.
-        /// 
-        /// DELETE: api/Workouts/delete
         /// </summary>
         /// <param name="id">Workout id</param>
         /// <returns>HTTP response code</returns>
@@ -123,8 +115,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Updates a workout. Does not assign sets.
-        /// 
-        /// PUT: api/Workouts
         /// </summary>
         /// <param name="id">Workout id</param>
         /// <param name="workoutDto">Info to update workout with</param>
@@ -161,8 +151,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Assigne sets to a workout.
-        /// 
-        /// POST: api/Workouts/assignSets
         /// </summary>
         /// <param name="sets">List of set Id's</param>
         /// <param name="id">Workout id</param>
@@ -198,13 +186,13 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Assign sets to a workout by exercise id's
-        /// 
-        /// PUT api/Workouts/assignSetsByExercise
         /// </summary>
         /// <param name="exercises">List of exercise id's</param>
         /// <param name="id">Workout id</param>
         /// <returns></returns>
         [HttpPut("assignSetsByExercise")]
+        [Authorize(Policy = "isUser")]
+
         public async Task<IActionResult> AssigneSetsByExercise([FromBody] List<int> exercises, [FromHeader(Name = "id")] int id)
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
@@ -252,8 +240,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Get all exercises in a workout.
-        /// 
-        /// GET: api/Workouts/exercises
         /// </summary>
         /// <param name="id">Workout id</param>
         /// <returns>List of exercises</returns>

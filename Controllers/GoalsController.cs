@@ -34,8 +34,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all goals, regardless of which user it belongs to
-        /// 
-        /// GET: api/Goals/all
         /// </summary>
         /// <returns>List of goals</returns>
         [HttpGet("all")]
@@ -48,8 +46,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets goal given goal ID
-        /// 
-        /// GET: api/Goals
         /// </summary>
         /// <param name="id">Goal ID</param>
         /// <returns>Goal</returns>
@@ -69,8 +65,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets all goals of a user
-        /// 
-        /// GET: api/Goals/user
         /// </summary>
         /// <param name="userId">User ID</param>
         /// <returns>List of goals</returns>
@@ -87,8 +81,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Gets user's current unfinished goal
-        /// 
-        /// GET: api/Goals/CurrentGoal
         /// </summary>
         /// <param name="userId">User ID</param>
         /// <returns>Current goal</returns>
@@ -110,8 +102,6 @@ namespace MeFit.Controllers
 
         /// <summary>
         /// Deletes goal given goal ID
-        /// 
-        /// DELETE: api/Goals/delete
         /// </summary>
         /// <param name="id">Goal ID</param>
         /// <returns>HTTP response code</returns>
@@ -170,48 +160,6 @@ namespace MeFit.Controllers
 
             var addedGoal = _mapper.Map<GoalReadDTO>(goal);
             return CreatedAtAction("GetGoal", new { Id = goal.Id }, addedGoal);
-        }
-
-        /// <summary>
-        /// Assigns workouts to a goal. Overwrites current workouts assigned to goal
-        /// </summary>
-        /// <param name="Workouts">Workout IDs</param>
-        /// <param name="goalId">Goal ID</param>
-        /// <returns>HTTP response message</returns>
-        [HttpPut("assignWorkouts")]
-        [Authorize(Policy = "isUser")]
-        public async Task<ActionResult> AssignWorkoutToGoal([FromBody] List<int> Workouts, [FromHeader(Name = "GoalID")] int goalId)
-        {
-
-            var goal = await _context.Goals.Include(g => g.WorkoutGoals).FirstOrDefaultAsync(g => g.Id == goalId);
-
-            // Only allow users to modify their own goals
-            if (TokenUserId() != goal.ProfileId)
-                return Forbid();
-
-            if (goal == null)
-            {
-                return NotFound();
-            }
-
-            //foreach (var workout in goal.Workouts)
-            //{
-            //    goal.WorkoutsGoals.Remove(workout);
-            //}
-
-            foreach (var workoutId in Workouts)
-            {
-                var tempWorkout = await _context.Workouts.FirstOrDefaultAsync(w => w.Id == workoutId);
-                if (tempWorkout != null)
-                {
-                    var addedGoal = _mapper.Map<GoalWorkouts>(tempWorkout);
-
-                    goal.WorkoutGoals.Add(addedGoal);
-                }
-            }
-
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
 
         /// <summary>
