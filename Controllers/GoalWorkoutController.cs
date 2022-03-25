@@ -9,7 +9,7 @@ using MeFit.Models.Domain;
 using MeFit.Models.DTOs.WorkoutGoals;
 using AutoMapper;
 using System.Net.Mime;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeFit.Controllers
 {
@@ -32,17 +32,23 @@ namespace MeFit.Controllers
         /// <summary>
         /// Gets all WorkoutGoals
         /// 
-        /// GET: api/WorkoutGoals/all
         /// </summary>
         /// <returns>List of WorkoutGoals</returns>
         [HttpGet("all")]
+        [Authorize(Policy = "isAdmin")]
         public async Task<ActionResult<IEnumerable<WorkoutGoalsReadDTO>>> GetWorkoutGoals()
         {
             var workoutGoals = _mapper.Map<List<WorkoutGoalsReadDTO>>(await _context.GoalWorkouts.ToListAsync());
             return Ok(workoutGoals);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="goalId"></param>
+        /// <returns></returns>
         [HttpGet("byGoalId")]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult<IEnumerable<WorkoutGoalsReadDTO>>> GetWorkoutGoalsById([FromHeader(Name = "goalId")] int goalId)
         {
             var workoutGoals = _mapper.Map<List<WorkoutGoalsReadDTO>>(await _context.GoalWorkouts.Where(gw => gw.GoalId == goalId).ToListAsync());
@@ -52,14 +58,13 @@ namespace MeFit.Controllers
         /// <summary>
         /// Create a new link between goal and workout.
         /// 
-        /// PUT: api/WorkoutGoals
         /// </summary>
         /// <param name="WorkoutGoals">The new workout goal</param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "isUser")]
         public async Task<ActionResult> AssignWorkoutGoal([FromBody] WorkoutGoalsCreateDTO WorkoutGoals)
         {
-  
             var goal = _mapper.Map<GoalWorkouts>(WorkoutGoals);
 
             try
@@ -77,6 +82,7 @@ namespace MeFit.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(Policy = "isUser")]
         public async Task<IActionResult> UpdateWorkoutGoal([FromHeader(Name = "goalId")] int goalId, [FromHeader(Name = "workoutId")] int workoutId, [FromBody] WorkoutGoalsEditDTO workoutGoal)
         {
             if (goalId != workoutGoal.GoalId)
@@ -103,6 +109,4 @@ namespace MeFit.Controllers
             return NoContent();
         }
     }
-
-
 }
