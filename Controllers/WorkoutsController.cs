@@ -161,15 +161,11 @@ namespace MeFit.Controllers
         {
             var workout = await _context.Workouts.Include(w => w.Sets).FirstOrDefaultAsync(w => w.Id == id);
 
-            foreach (var set in workout.Sets)
-            {
-                workout.Sets.Remove(set);
-            }
 
             if (workout == null)
             {
                 return NotFound();
-            }
+            }   
 
             foreach (var setId in sets)
             {
