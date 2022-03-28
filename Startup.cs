@@ -16,6 +16,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace MeFit
 {
@@ -33,6 +37,37 @@ namespace MeFit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+                        {
+                            var client = new HttpClient();
+                            var keyuri = Configuration["KeyURI"];
+                            var response = client.GetAsync(keyuri).Result;
+                            var responseString = response.Content.ReadAsStringAsync().Result;
+                            var keys = JsonConvert.DeserializeObject<JsonWebKeySet>(responseString);
+                            return keys.Keys;
+                        },
+
+                        ValidIssuers = new List<string>
+                        {
+                            Configuration["IssuerURI"]
+                        },
+                        
+                        ValidAudience = "account",
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("isAdministrator", policy => policy.RequireClaim("user_role", "Admin"));
+                options.AddPolicy("isContributor", policy => policy.RequireClaim("user_role", "Contributor"));
+                options.AddPolicy("isUser", policy => policy.RequireClaim("user_role", "User"));
+            });
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy(name: "devPolicy", builder =>
@@ -141,7 +176,7 @@ namespace MeFit
             else
                 app.UseCors("prodPolicy");
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             //app.UseIdentityServer();
             app.UseAuthorization();
 
