@@ -1,44 +1,75 @@
 # MeFit
 
-MeFit is an application built for managing weekly workout goals.
-Users of the application can get an exercise scheme based on programs which 
-include exercises and sets. These schemes are catered to the users goals.
+MeFit is an application built for managing workout goals. Regular users of the application can view programs, workouts and exercises, as well as update their user profiles. They can then set a goal for themselves based on a program, and optionally add extra workouts to their goal. Contributors (and admins) will also have the option to create and edit exisiting workouts, programs and exercises.
 
-This repository contains the backend of the application, 
-which is an ASP.NET Web API created in C# .NET 5 framework using Keycloak for user authentication.
-For database creating we are using Enitity Framework Core for database creating and for API documentation we are using the extension Swashbuckle which allows us to use Swagger (a collection of html, css and js used to autogenerate a documentation UI).
+This repository contains the backend of the application, which is an ASP.NET Web API created in C# .NET 5 framework using Keycloak for user authentication.
 
-TODO: Write more about what the database contains (tables) and the relationships between them.
+For database creation we are using Entity Framework Core. ERD which the database is based on can be found here. ***TODO ADD LINK***
 
-# Deployed using Azure with continous deployment
+API documentation can be found later in this Readme. Additonally, when running this project in development mode, Swagger documentation can be viewed.
+
+##### Table of Contents  
+[[_TOC_]]
+
+## Deployment
+Deployed to Azure with continous deployment. Requests requires valid token from our deployed Keycloak instance.
 
 [MeFit Azure API](https://mefit.azurewebsites.net/)
 
-# Install
+## Keycloak setup
+In order to run the full application, a local instance of Keycloak is required. After getting your own local instance of [Keycloak](https://hub.docker.com/r/jboss/keycloak/), create a realm for the app. Click on clients -> create. Give the client a name and save. Then update these values for the client:
 
- - Clone to a local directory
+- Valid redirect URIs: http://localhost:3000/*
+- Web Origins: http://localhost:3000
+
+Then enable user registration by clicking Realm settings -> Login, and turn user registration on.
+
+The next step is to set up user roles for the client. Click Clients -> {name of client} -> Roles -> Add role.
+Give the first role the name "User" and click save.
+Repeat the steps for "Contributor". After saving, set "Composite Roles" to ON. Under Client Roles, select {name of client}. The newly created "User" role should appear. Select "User" and click Add Selected.
+Repeat the same steps for "Admin", but select "Contributor" instead of "User" under Available roles and add it.
+
+Next, set "User" as the default role. Click Roles (in the sidebar) -> Default Roles. Select {name of client} in Client Roles. All three user roles should appear under Available roles. Select "User" and Add Selected.
+
+Lastly, we need these roles to be passed in the tokens. Click Clients -> {name of client} -> Mappers -> Create. Give it the following values:
+- Name: user_role
+- Mapper Type: User Client Role
+- Client ID: {name of client}
+- Claim JSON Type: string
+
+Keep the remaining settings to default and save. After saving, verify the Token Claim Name for the mapper is user_role.
+
+## Install
+
+**For this project you will also need to install the [frontend](https://gitlab.com/g5453/frontend) and have a running Keycloak(see Keycloak setup above) instance running on your computer.**
+
+Clone to a local directory:
 ```bash
 git clone https://gitlab.com/g5453/backend.git
 ```
- - Open solution in Visual Studio or another IDE
- - Update to your SQL Server connection info in appsettings.json
 
-# Usage
+In appsettings.Development.json, change the following variables:
 
-In the package manager console in Visual Studio:
+- "LocalDevelopment": should be your SQL server connection string
+- "IssuerURI" & "KeyURI": should be the issuer and key links for your own Keycloak instance.
+
+Open solution in Visual Studio or another IDE. In the package-manager console, run the following command:
+
 ```bash
 update-database
 ```
 
-Run the project in Visual Studio, and test the APIs in Swagger/Postman.
+## Usage
 
-# Maintainers
+Run the project in Visual Studio, and test the APIs in Postman with valid tokens, or test it from the [frontend application](https://gitlab.com/g5453/frontend).
 
-Stian Økland [@StianOkland](https://github.com/StianOkland)<br />
-Isak Hauknes [@larrycaw](https://github.com/larrycaw)<br />
-Andrea Hårseth Nakstad [@andreahn](https://github.com/andreahn)
+## Maintainers
 
-# API endpoints
+Stian Økland [@StianOkland](https://gitlab.com/StianOkland)<br />
+Isak Hauknes [@larrycaw](https://gitlab.com/larrycaw)<br />
+Andrea Hårseth Nakstad [@andreahn](https://gitlab.com/anakstad)
+
+## API documentation
 
 These endpoints allow you to handle communication with MeFit database deployed on azure
 
