@@ -94,8 +94,6 @@ namespace MeFit
                     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 });
 
-                //services.AddApplicationInsightsTelemetry();
-
                 services.AddDbContext<MeFitDbContext>(options =>
                     options.UseSqlServer(
                         Configuration.GetConnectionString("DefaultConnection")));
@@ -111,36 +109,9 @@ namespace MeFit
 
             services.AddAutoMapper(typeof(Startup));
 
-            //services.AddDefaultIdentity<MeFitDbContext>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<MeFitDbContext>();
-
-            //if (Environment.IsProduction())
-            //{
-            //    // Read credential from configuration
-            //    var bytes = Convert.FromBase64String(Configuration["SigningKeyBase64"]);
-
-            //    // https://github.com/dotnet/runtime/issues/24406#issuecomment-351087167
-            //    var collection = new X509Certificate2Collection();
-            //    collection.Import(bytes);
-
-            //    services.AddIdentityServer()
-            //        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
-            //        .AddSigningCredential(collection[0]);
-
-            //}
-            //else
-            //{
-            //    services.AddIdentityServer()
-            //        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-            //}
-
-            //services.AddAuthentication()
-            //    .AddIdentityServerJwt();
-
 
             services.AddControllers();
-            //services.AddDbContext<MeFitDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MeFit", Version = "v1" });
@@ -162,9 +133,6 @@ namespace MeFit
             else
             {
                 app.UseForwardedHeaders();
-                //app.UseExceptionHandler("/Error");
-                //app.UseHsts();
-
             }
 
             app.UseHttpsRedirection();
@@ -177,7 +145,6 @@ namespace MeFit
                 app.UseCors("prodPolicy");
 
             app.UseAuthentication();
-            //app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
