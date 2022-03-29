@@ -101,6 +101,7 @@ Get basic exercise data
 |-----:|:--------:|:----:|---------------------------------------------------------|
 | `id` | required | int  | Exercise ID. <br/><br/> Supported values: `exerciseId`. |
 
+200 Success means that the API call was successful
 
 <details>
  <summary><b>200 Success</b> - Sample response</summary>
@@ -113,6 +114,23 @@ Get basic exercise data
   "targetMuscleGroup": "string",
   "imageURL": "string",
   "videoURL": "string"
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
