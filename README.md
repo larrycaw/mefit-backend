@@ -557,12 +557,24 @@ Adds a new exercise to the database
 
 **Parameters**
 
-|       Name | Required |   Type   | Description                                                     |
-|-----------:|:--------:|:--------:|-----------------------------------------------------------------|
-| `exercise` | required | Exercise | Exercise object to add. <br/><br/> Supported values: `exercise` |
+No parameters
+
+**Sample request body**
+
+```
+{
+  "name": "string",
+  "description": "string",
+  "targetMuscleGroup": "string",
+  "imageURL": "string",
+  "videoURL": "string"
+}
+```
 
 <details>
  <summary>Response</summary>
+
+ 201 Created: exercise was successfully created 
 
 ```
 {
@@ -573,6 +585,19 @@ Adds a new exercise to the database
   "videoURL": null
 }
 ```
+
+ 400 Bad Request: could happen if the request body has the incorrect format
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
 </details>
 
 ### POST /api/Goals
