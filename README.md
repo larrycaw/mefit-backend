@@ -1414,6 +1414,7 @@ through but request parameters was not right
   "instance": "string"
 }
 ```
+</details>
 
 ### PUT /api/Workouts
 Edits a workout in the database
@@ -1465,6 +1466,7 @@ through but request parameters was not right
   "instance": "string"
 }
 ```
+</details>
 
 ### PUT /api/Workouts/assignSets
 Assign sets to a workout.
