@@ -200,29 +200,6 @@ namespace MeFit.Models.Data
                         );
                     });
 
-
-            //modelBuilder.Entity<Workout>()
-            //    .HasMany(g => g.Goals)
-            //    .WithMany(w => w.Workouts)
-            //    .UsingEntity<GoalWorkouts>("WorkoutGoals", GoalWorkouts);
-
-            //modelBuilder.Entity<Workout>()
-            //    .HasMany(g => g.Goals)
-            //    .WithMany(w => w.Workouts)
-            //    .UsingEntity<Dictionary<string, object>>(
-            //        "WorkoutGoals",
-            //        r => r.HasOne<Goal>().WithMany().HasForeignKey("GoalId"),
-            //        l => l.HasOne<Workout>().WithMany().HasForeignKey("WorkoutId"),
-            //        je =>
-            //        {
-            //            je.HasKey("GoalId", "WorkoutId");
-            //            je.Property<bool>("Completed");
-            //            je.HasData(
-            //                new { WorkoutId = 1, GoalId = 1, Completed = false },
-            //                new { WorkoutId = 2, GoalId = 2, Completed = false }
-            //            );
-            //        });
-
             modelBuilder.Entity<Workout>()
                 .HasMany(p => p.Programs)
                 .WithMany(w => w.Workouts)
