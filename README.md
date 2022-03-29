@@ -75,6 +75,9 @@ These endpoints allow you to handle communication with MeFit database deployed o
 
 ### GET /api/Exercises/all
 Get all exercise data
+
+200 Success means that the API call was successful
+
 <details>
  <summary><b>200 Success</b> - Sample response</summary>
 
@@ -97,9 +100,9 @@ Get basic exercise data
 
 **Parameters**
 
-| Name | Required | Type | Description                                             |
-|-----:|:--------:|:----:|---------------------------------------------------------|
-| `id` | required | int  | Exercise ID. <br/><br/> Supported values: `exerciseId`. |
+| Name | Required | Type | Description  |
+|-----:|:--------:|:----:|--------------|
+| `id` | required | int  | Exercise ID. |
 
 200 Success means that the API call was successful
 
@@ -137,6 +140,9 @@ through but request parameters was not found
 
 ### GET /api/Goals/all
 Get all goals with associated program and workouts
+
+200 Success means that the API call was successful
+
 <details>
  <summary><b>200 Success</b> - Sample response</summary>
 
@@ -165,9 +171,11 @@ Get a goal with associated program and workouts
 
 **Parameters**
 
-|          Name | Required | Type | Description                                     |
-|--------------:|:--------:|:----:|-------------------------------------------------|
-|          `id` | required | int  | Goal ID. <br/><br/> Supported values: `goalId`. |
+| Name | Required | Type | Description |
+|-----:|:--------:|:----:|-------------|
+| `id` | required | int  | Goal ID.    |
+
+200 Success means that the API call was successful
 
 <details>
  <summary><b>200 Success</b> - Sample response</summary>
@@ -190,15 +198,33 @@ Get a goal with associated program and workouts
 ```
 </details>
 
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
 ### GET /api/Goals/user
 Get a users goals
 
 **Parameters**
 
-| Name | Required | Type | Description                                     |
-|-----:|:--------:|:----:|-------------------------------------------------|
-| `id` | required | int  | User ID. <br/><br/> Supported values: `userId`. |
+|     Name | Required |  Type  | Description |
+|---------:|:--------:|:------:|-------------|
+| `userId` | required | string | User ID.    |
 
+200 Success means that the API call was successful
 
 <details>
  <summary><b>200 Success</b> - Sample response</summary>
@@ -221,21 +247,40 @@ Get a users goals
 ```
 </details>
 
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
 ### GET /api/Goals/currentGoal
 Get a users current goal
 
 **Parameters**
 
-| Name | Required | Type | Description                                     |
-|-----:|:--------:|:----:|-------------------------------------------------|
-| `id` | required | int  | User ID. <br/><br/> Supported values: `userId`. |
+|     Name | Required |  Type  | Description |
+|---------:|:--------:|:------:|-------------|
+| `userId` | required | string | User ID.    |
+
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "programEndDate": "2022-03-28T08:05:35.902Z",
+  "programEndDate": "2022-03-29T20:30:56.284Z",
   "achieved": true,
   "programId": 0,
   "workoutGoals": [
@@ -249,11 +294,30 @@ Get a users current goal
 ```
 </details>
 
-### GET /api/GoalWorkout/all
-Get all workouts associated with goals -- here todo - update response
+Error code 404 happens when the api call went
+through but request parameters was not found
 
 <details>
- <summary>Response</summary>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+### GET /api/GoalWorkout/all
+Get all workouts associated with goals
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 [
@@ -283,34 +347,61 @@ Get all workouts associated with goals -- here todo - update response
 ```
 </details>
 
-### GET /api/MFProgram/all
-Get all programs with associated workouts
+### GET /api/GoalWorkout/byGoalId
+Gets a goal by goal ID
+
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 [
   {
-    "name": "Bicep enhancement",
-    "category": "Upper body",
-    "workouts": [
-      1
-    ]
-  },
+    "workoutId": 0,
+    "goalId": 0,
+    "completed": true
+  }
+]
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+### GET /api/MFProgram/all
+Get all programs with associated workouts
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - Sample response</summary>
+
+```
+[
   {
-    "name": "Strength building",
-    "category": "Whole body",
+    "id": 0,
+    "name": "string",
+    "category": "string",
     "workouts": [
-      1,
-      2
-    ]
-  },
-  {
-    "name": "Cardio",
-    "category": "Whole body",
-    "workouts": [
-      3
+      0
+    ],
+    "workoutNames": [
+      "string"
     ]
   }
 ]
@@ -322,20 +413,43 @@ Get a program with associated workouts
 
 **Parameters**
 
-| Name | Required | Type | Description                                           |
-|-----:|:--------:|:----:|-------------------------------------------------------|
-| `id` | required | int  | Program ID. <br/><br/> Supported values: `programId`. |
+| Name | Required | Type | Description |
+|-----:|:--------:|:----:|-------------|
+| `id` | required | int  | Program ID. |
+
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "name": "Bicep enhancement",
-  "category": "Upper body",
+  "id": 0,
+  "name": "string",
+  "category": "string",
   "workouts": [
-    1
+    0
+  ],
+  "workoutNames": [
+    "string"
   ]
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
@@ -343,16 +457,16 @@ Get a program with associated workouts
 ### GET /api/Profile/all
 Get all profiles with associated workoutId and setId
 
+200 Success means that the API call was successful
+
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 [
   {
-    "weight": 80,
-    "height": 180,
-    "workoutId": null,
-    "setId": null,
+    "weight": 0,
+    "height": 0,
     "medicalConditions": "string",
     "disabilities": "string"
   }
@@ -365,21 +479,38 @@ Get a profile with associated workoutId and setId
 
 **Parameters**
 
-| Name | Required |  Type  | Description                                                                                       |
-|-----:|:--------:|:------:|---------------------------------------------------------------------------------------------------|
-| `id` | required | string | Get a profile by id with workoutId and setId if exists. <br/><br/> Supported values: `profileId`. |
+| Name | Required |  Type  | Description |
+|-----:|:--------:|:------:|-------------|
+| `id` | required | string | User ID     |
+
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "weight": 80,
-  "height": 180,
-  "workoutId": null,
-  "setId": null,
+  "weight": 0,
+  "height": 0,
   "medicalConditions": "string",
   "disabilities": "string"
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
@@ -389,20 +520,44 @@ Get a users current goal with associated workouts
 
 **Parameters**
 
-| Name | Required |  Type  | Description                                     |
-|-----:|:--------:|:------:|-------------------------------------------------|
-| `id` | required | string | Goal ID. <br/><br/> Supported values: `userId`. |
+|     Name | Required |  Type  | Description |
+|---------:|:--------:|:------:|-------------|
+| `userId` | required | string | Goal ID.    |
 
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "programEndDate": "2022-03-14T14:09:35.292",
-  "achieved": false,
-  "programId": 1,
-  "workouts": []
+  "programEndDate": "2022-03-29T21:38:21.064Z",
+  "achieved": true,
+  "programId": 0,
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "completed": true
+    }
+  ]
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
@@ -410,24 +565,19 @@ Get a users current goal with associated workouts
 ### GET /api/Set/all
 Get all sets and associated exerciseId and workoutId's
 
+200 Success means that the API call was successful
+
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
-]
+[
   {
-    "exerciseRepetitions": 10,
-    "exerciseId": 1,
+    "id": 0,
+    "exerciseRepetitions": 0,
+    "exerciseId": 0,
     "workouts": [
-      1,
-      2
-    ]
-  },
-  {
-    "exerciseRepetitions": 20,
-    "exerciseId": 2,
-    "workouts": [
-      1
+      0
     ]
   }
 ]
@@ -439,22 +589,40 @@ Get a set with associated exerciseId and workoutId's
 
 **Parameters**
 
-| Name | Required | Type | Description                                   |
-|-----:|:--------:|:----:|-----------------------------------------------|
-| `id` | required | int  | Set ID. <br/><br/> Supported values: `setId`. |
+| Name | Required | Type | Description |
+|-----:|:--------:|:----:|-------------|
+| `id` | required | int  | Set id.     |
 
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "exerciseRepetitions": 10,
-  "exerciseId": 1,
+  "id": 0,
+  "exerciseRepetitions": 0,
+  "exerciseId": 0,
   "workouts": [
-    1,
-    2
+    0
   ]
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
@@ -462,50 +630,29 @@ Get a set with associated exerciseId and workoutId's
 ### GET /api/Workouts/all
 Get all workouts with associated goals, sets and programs
 
+200 Success means that the API call was successful
+
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 [
   {
-    "name": "Arm day",
-    "type": "Strength",
-    "complete": false,
+    "id": 0,
+    "name": "string",
+    "type": "string",
     "sets": [
-      1,
-      2
+      0
     ],
-    "goals": [],
-    "programs": [
-      1,
-      2
-    ]
-  },
-  {
-    "name": "Leg day",
-    "type": "Strength",
-    "complete": true,
-    "sets": [
-      1
-    ],
-    "goals": [
-      2,
-      4
+    "workoutGoals": [
+      {
+        "workoutId": 0,
+        "goalId": 0,
+        "completed": true
+      }
     ],
     "programs": [
-      2
-    ]
-  },
-  {
-    "name": "Running",
-    "type": "Cardio",
-    "complete": false,
-    "sets": [],
-    "goals": [
-      4
-    ],
-    "programs": [
-      3
+      0
     ]
   }
 ]
@@ -515,31 +662,52 @@ Get all workouts with associated goals, sets and programs
 ### GET /api/Workouts
 Get a workout with associated goals, sets and programs
 
-
 **Parameters**
 
-| Name | Required | Type | Description                                           |
-|-----:|:--------:|:----:|-------------------------------------------------------|
-| `id` | required | int  | Workout ID. <br/><br/> Supported values: `workoutId`. |
+| Name | Required | Type | Description |
+|-----:|:--------:|:----:|-------------|
+| `id` | required | int  | Workout Id. |
 
+200 Success means that the API call was successful
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
 {
-  "name": "Arm day",
-  "type": "Strength",
-  "complete": false,
+  "id": 0,
+  "name": "string",
+  "type": "string",
   "sets": [
-    1,
-    2
+    0
   ],
-  "goals": [],
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "completed": true
+    }
+  ],
   "programs": [
-    1,
-    2
+    0
   ]
+}
+```
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
 </details>
@@ -566,7 +734,7 @@ No parameters
 ```
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Exercise was successfully created 
 
@@ -582,7 +750,7 @@ Exercise was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -616,7 +784,7 @@ No parameters
 ```
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Goal was successfully created 
 
@@ -639,7 +807,7 @@ Goal was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -672,7 +840,7 @@ No parameters
 ```
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Program was successfully created 
 
@@ -738,7 +906,7 @@ Program was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -759,9 +927,9 @@ Assigns a workout to a program to the database
 
 **Parameters**
 
-|           Name | Required |  Type  | Description                                                            |
-|---------------:|:--------:|:------:|------------------------------------------------------------------------|
-|           `id` | required |  int   | Program ID.                                                            |
+| Name | Required |  Type  | Description |
+|-----:|:--------:|:------:|-------------|
+| `id` | required |  int   | Program ID. |
 
 **Sample request body**
 Should contain an array of workout IDs.
@@ -772,7 +940,7 @@ Should contain an array of workout IDs.
 ]
 ```
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 No content
 </details>
@@ -799,7 +967,7 @@ No parameters
 
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Profile was successfully created 
 
@@ -814,7 +982,7 @@ Profile was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -847,7 +1015,7 @@ No parameters
 ```
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Set was successfully created 
 
@@ -921,7 +1089,7 @@ Set was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -954,7 +1122,7 @@ No parameters
 ```
 
 <details>
- <summary><b>201 Created</b> - sample response</summary>
+ <summary><b>201 Created</b> - Sample response</summary>
 
 Workout was successfully created
 
@@ -1028,7 +1196,7 @@ Workout was successfully created
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
  
  Could happen if the request body has the incorrect format.
 
@@ -1049,15 +1217,15 @@ Edits an exercise in the database
 
 **Parameters**
 
-|       Name | Required |   Type   | Description                             |
-|-----------:|:--------:|:--------:|-----------------------------------------|
-|       `id` | required |   int    | Exercise ID.                            |
-| `exercise` | required | Exercise | Exercise object to replace.             |
+|       Name | Required |   Type   | Description                 |
+|-----------:|:--------:|:--------:|-----------------------------|
+|       `id` | required |   int    | Exercise ID.                |
+| `exercise` | required | Exercise | Exercise object to replace. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1066,15 +1234,15 @@ Assigns a program to a goal
 
 **Parameters**
 
-|         Name | Required | Type | Description               |
-|-------------:|:--------:|:----:|---------------------------|
-|     `GoalID` | required | int  | Goal ID.                  |
-| `Program ID` | required | int  | Program ID .              |
+|         Name | Required | Type | Description |
+|-------------:|:--------:|:----:|-------------|
+|     `GoalID` | required | int  | Goal ID.    |
+| `Program ID` | required | int  | Program ID. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1091,7 +1259,7 @@ Updates a goal to the database
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1100,14 +1268,14 @@ Create a new link between goal and workout.
 
 **Parameters**
 
-|          Name| Required |        Type | Description                              |
-|-------------:|:--------:|:-----------:|------------------------------------------|
-|`GoalWorkout` | required | GoalWorkout | New GoalWorkout to be created            |
+|          Name | Required |    Type     | Description                    |
+|--------------:|:--------:|:-----------:|--------------------------------|
+| `GoalWorkout` | required | GoalWorkout | New GoalWorkout to be created. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1116,10 +1284,10 @@ Updates a workout goal
 
 **Parameters**
 
-|       Name| Required | Type | Description             |
-|----------:|:--------:|:----:|-------------------------|
-|`goalId`   | required | int  | Goal ID.                |
-|`workoutId`| required | int  | Workout ID.             |
+|        Name | Required | Type | Description |
+|------------:|:--------:|:----:|-------------|
+|    `goalId` | required | int  | Goal ID.    |
+| `workoutId` | required | int  | Workout ID. |
 
 200 Success means that the API call was successful
 
@@ -1132,15 +1300,15 @@ Edits a program in the database
 
 **Parameters**
 
-|                Name| Required |  Type   | Description                            |
-|-------------------:|:--------:|:-------:|----------------------------------------|
-|            `id`    | required |   int   | Program ID.                            |
-| `New program info` | required | Program | Program object to replace.             |
+|               Name | Required |  Type   | Description                |
+|-------------------:|:--------:|:-------:|----------------------------|
+|               `id` | required |   int   | Program ID.                |
+| `New program info` | required | Program | Program object to replace. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1183,15 +1351,15 @@ Edits a profile in the database
 
 **Parameters**
 
-|             Name | Required |  Type   | Description                           |
-|-----------------:|:--------:|:-------:|---------------------------------------|
-|             `id` | required |   int   | Profile ID.                           |
-| `Profile object` | required | Profile | Profile object to replace.            |
+|             Name | Required |  Type   | Description                |
+|-----------------:|:--------:|:-------:|----------------------------|
+|             `id` | required |   int   | Profile ID.                |
+| `Profile object` | required | Profile | Profile object to replace. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1200,15 +1368,15 @@ Edits a set in the database
 
 **Parameters**
 
-|           Name | Required | Type | Description                       |
-|---------------:|:--------:|:----:|-----------------------------------|
-|           `id` | required | int  | Set ID.                           |
-| `New set info` | required | Set  | Set object to replace.            |
+|           Name | Required | Type | Description            |
+|---------------:|:--------:|:----:|------------------------|
+|           `id` | required | int  | Set ID.                |
+| `New set info` | required | Set  | Set object to replace. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1251,15 +1419,15 @@ Edits a workout in the database
 
 **Parameters**
 
-|                          Name | Required |  Type   | Description                           |
-|------------------------------:|:--------:|:-------:|---------------------------------------|
-|                          `id` | required |   int   | Workout ID.                           |
-| `Info to update workout with` | required | Workout | Workout object to replace.            |
+|      Name | Required |  Type   | Description                |
+|----------:|:--------:|:-------:|----------------------------|
+|      `id` | required |   int   | Workout ID.                |
+| `Workout` | required | Workout | Workout object to replace. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1302,15 +1470,15 @@ Assign sets to a workout.
 
 **Parameters**
 
-|       Name | Required |  Type      | Description                                   |
-|-----------:|:--------:|:----------:|-----------------------------------------------|
-|       `id` | required |   int      | Workout ID.                                   |
-| `Set ID's` | required | List of int| List of Set IDs to add to workout.            |
+|      Name | Required |    Type     | Description                        |
+|----------:|:--------:|:-----------:|------------------------------------|
+|      `id` | required |     int     | Workout ID.                        |
+| `Set IDs` | required | List of int | List of Set IDs to add to workout. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1319,15 +1487,15 @@ Assign sets to a workout by exercise id's
 
 **Parameters**
 
-|            Name | Required |  Type      | Description             |
-|----------------:|:--------:|:----------:|-------------------------|
-|            `id` | required |   int      | Workout ID.             |
-| `Exercise ID's` | required | List of int| List of Exercise IDs.   |
+|            Name | Required |    Type     | Description           |
+|----------------:|:--------:|:-----------:|-----------------------|
+|            `id` | required |     int     | Workout ID.           |
+| `Exercise ID's` | required | List of int | List of Exercise IDs. |
 
 200 Success means that the API call was successful
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1339,19 +1507,19 @@ Deletes an exercise from the database.
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                            |
-|-------------------:|:--------:|:-------:|--------------------------------------------------------|
-|               `id` | required |   int   | Exercise ID.                                           |
+| Name | Required |  Type   | Description  |
+|-----:|:--------:|:-------:|--------------|
+| `id` | required |   int   | Exercise ID. |
 
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 No content
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
 
 ```
 {
@@ -1369,18 +1537,18 @@ Deletes a goal from the database
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                    |
-|-------------------:|:--------:|:-------:|------------------------------------------------|
-|               `id` | required |   int   | Goal ID.                                       |
+| Name | Required |  Type   | Description |
+|-----:|:--------:|:-------:|-------------|
+| `id` | required |   int   | Goal ID.    |
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 No content
 </details>
 
 <details>
- <summary><b>404 Not Found</b> - sample response</summary>
+ <summary><b>404 Not Found</b> - Sample response</summary>
 
  Could happen if the goal does not exist in the database
 
@@ -1396,7 +1564,7 @@ No content
 </details>
 
 <details>
- <summary><b>400 Bad Request</b> - sample response</summary>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
 
 ```
 {
@@ -1410,38 +1578,102 @@ No content
 </details>
 
 ### DELETE /api/MFProgram/delete
-Deletes a program from the database
+Delete a program by id.
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                          |
-|-------------------:|:--------:|:-------:|------------------------------------------------------|
-|               `id` | required |   int   | Program ID. <br/><br/> Supported values: `programId` |
+| Name | Required | Type | Description |
+|-----:|:--------:|:----:|-------------|
+| `id` | required | int  | Program ID. |
 
-Gives no response
+<details>
+ <summary><b>200 Success</b> - Sample response</summary>
+
+No content
+</details>
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
 
 ### DELETE /api/Profile/delete
 Deletes a profile from the database
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                          |
-|-------------------:|:--------:|:-------:|------------------------------------------------------|
-|               `id` | required |   int   | Profile ID. <br/><br/> Supported values: `profileId` |
+| Name | Required |  Type  | Description |
+|-----:|:--------:|:------:|-------------|
+| `id` | required | string | Profile ID. |
 
-Gives no response
+<details>
+ <summary><b>200 Success</b> - Sample response</summary>
+
+No content
+</details>
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
 
 ### DELETE /api/Workouts/delete
 Delete a workout from the database.
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                          |
-|-------------------:|:--------:|:-------:|------------------------------------------------------|
-|               `id` | required |   int   | Workout ID.                                          |
+| Name | Required |  Type   | Description |
+|-----:|:--------:|:-------:|-------------|
+| `id` | required |   int   | Workout ID. |
 
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
 
@@ -1450,12 +1682,11 @@ Delete a set from the database.
 
 **Parameters**
 
-|               Name | Required |  Type   | Description                                          |
-|-------------------:|:--------:|:-------:|------------------------------------------------------|
-|               `id` | required |   int   | Set ID.                                              |
+| Name | Required |  Type   | Description |
+|-----:|:--------:|:-------:|-------------|
+| `id` | required |   int   | Set ID.     |
  
 <details>
- <summary><b>200 Success</b> - sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
  No content
 </details>
-
