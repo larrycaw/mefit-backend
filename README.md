@@ -4,7 +4,7 @@ MeFit is an application built for managing workout goals. Regular users of the a
 
 This repository contains the backend of the application, which is an ASP.NET Web API created in C# .NET 5 framework using Keycloak for user authentication.
 
-For database creation we are using Entity Framework Core. ERD which the database is based on can be found here. ***TODO ADD LINK***
+For database creation we are using Entity Framework Core. ERD which the database is based on can be found [here](https://gitlab.com/g5453/backend/-/blob/main/ERD.png).
 
 API documentation can be found later in this Readme. Additonally, when running this project in development mode, Swagger documentation can be viewed.
 
