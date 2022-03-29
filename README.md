@@ -1345,6 +1345,7 @@ through but request parameters was not right
   "instance": "string"
 }
 ```
+</details>
 
 ### PUT /api/Profile
 Edits a profile in the database
