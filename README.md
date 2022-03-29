@@ -1049,99 +1049,287 @@ Edits an exercise in the database
 
 **Parameters**
 
-|       Name | Required |   Type   | Description                                                         |
-|-----------:|:--------:|:--------:|---------------------------------------------------------------------|
-|       `id` | required |   int    | Exercise ID. <br/><br/> Supported values: `exerciseId`              |
-| `exercise` | required | Exercise | Exercise object to replace. <br/><br/> Supported values: `exercise` |
+|       Name | Required |   Type   | Description                             |
+|-----------:|:--------:|:--------:|-----------------------------------------|
+|       `id` | required |   int    | Exercise ID.                            |
+| `exercise` | required | Exercise | Exercise object to replace.             |
 
-Gives no response
+200 Success means that the API call was successful
 
-### PUT /api/Addresses
-Edits an address in the database
-
-**Parameters**
-
-|      Name | Required |  Type   | Description                                                       |
-|----------:|:--------:|:-------:|-------------------------------------------------------------------|
-|      `id` | required |   int   | Address ID. <br/><br/> Supported values: `addressId`              |
-| `address` | required | Address | Address object to replace. <br/><br/> Supported values: `address` |
-
-Gives no response
-
-### PUT /api/Goals/assignWorkouts
-Assigns one or more workouts to a goal
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
 
 ### PUT /api/Goals/assignProgram
 Assigns a program to a goal
 
 **Parameters**
 
-|         Name | Required | Type | Description                                          |
-|-------------:|:--------:|:----:|------------------------------------------------------|
-|     `GoalID` | required | int  | Goal ID. <br/><br/> Supported values: `goalId`       |
-| `Program ID` | required | int  | Program ID .<br/><br/> Supported values: `programId` |
+|         Name | Required | Type | Description               |
+|-------------:|:--------:|:----:|---------------------------|
+|     `GoalID` | required | int  | Goal ID.                  |
+| `Program ID` | required | int  | Program ID .              |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
 
 ### PUT /api/Goals/updateGoal
 Updates a goal to the database
 
 **Parameters**
 
-|     Name | Required | Type | Description                                                 |
-|---------:|:--------:|:----:|-------------------------------------------------------------|
-| `goalID` | required | int  | Goal ID. <br/><br/> Supported values: `goalId`              |
-|   `goal` | required | Goal | Goal object to replace. <br/><br/> Supported values: `goal` |
+|     Name | Required | Type | Description                        |
+|---------:|:--------:|:----:|------------------------------------|
+| `goalID` | required | int  | Goal ID.                           |
+|   `goal` | required | Goal | Goal object to replace.            |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+### PUT /api/GoalWorkout
+Create a new link between goal and workout.
+
+**Parameters**
+
+|          Name| Required |        Type | Description                              |
+|-------------:|:--------:|:-----------:|------------------------------------------|
+|`GoalWorkout` | required | GoalWorkout | New GoalWorkout to be created            |
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+### PUT /api/GoalWorkout/update
+Updates a workout goal
+
+**Parameters**
+
+|       Name| Required | Type | Description             |
+|----------:|:--------:|:----:|-------------------------|
+|`goalId`   | required | int  | Goal ID.                |
+|`workoutId`| required | int  | Workout ID.             |
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b></summary>
+</details>
 
 ### PUT /api/MFProgram/updateProgram
 Edits a program in the database
 
 **Parameters**
 
-|            Name | Required |  Type   | Description                                                       |
-|----------------:|:--------:|:-------:|-------------------------------------------------------------------|
-|            `id` | required |   int   | Program ID. <br/><br/> Supported values: `programId`              |
-| `New goal info` | required | Program | Program object to replace. <br/><br/> Supported values: `program` |
+|                Name| Required |  Type   | Description                            |
+|-------------------:|:--------:|:-------:|----------------------------------------|
+|            `id`    | required |   int   | Program ID.                            |
+| `New program info` | required | Program | Program object to replace.             |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+
+Error code 400 happens when the api call went
+through but request parameters was not right
+
+<details>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
 
 ### PUT /api/Profile
 Edits a profile in the database
 
 **Parameters**
 
-|             Name | Required |  Type   | Description                                                       |
-|-----------------:|:--------:|:-------:|-------------------------------------------------------------------|
-|             `id` | required |   int   | Profile ID. <br/><br/> Supported values: `profileId`              |
-| `Profile object` | required | Profile | Profile object to replace. <br/><br/> Supported values: `profile` |
+|             Name | Required |  Type   | Description                           |
+|-----------------:|:--------:|:-------:|---------------------------------------|
+|             `id` | required |   int   | Profile ID.                           |
+| `Profile object` | required | Profile | Profile object to replace.            |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
 
 ### PUT /api/Set/updateSet
 Edits a set in the database
 
 **Parameters**
 
-|           Name | Required | Type | Description                                               |
-|---------------:|:--------:|:----:|-----------------------------------------------------------|
-|           `id` | required | int  | Set ID. <br/><br/> Supported values: `setId`              |
-| `New set info` | required | Set  | Set object to replace. <br/><br/> Supported values: `set` |
+|           Name | Required | Type | Description                       |
+|---------------:|:--------:|:----:|-----------------------------------|
+|           `id` | required | int  | Set ID.                           |
+| `New set info` | required | Set  | Set object to replace.            |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+
+Error code 400 happens when the api call went
+through but request parameters was not right
+
+<details>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
 
 ### PUT /api/Workouts
 Edits a workout in the database
 
 **Parameters**
 
-|                          Name | Required |  Type   | Description                                                       |
-|------------------------------:|:--------:|:-------:|-------------------------------------------------------------------|
-|                          `id` | required |   int   | Workout ID. <br/><br/> Supported values: `addressId`              |
-| `Info to update workout with` | required | Workout | Workout object to replace. <br/><br/> Supported values: `workout` |
+|                          Name | Required |  Type   | Description                           |
+|------------------------------:|:--------:|:-------:|---------------------------------------|
+|                          `id` | required |   int   | Workout ID.                           |
+| `Info to update workout with` | required | Workout | Workout object to replace.            |
 
-Gives no response
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+Error code 404 happens when the api call went
+through but request parameters was not found
+
+<details>
+ <summary><b>404 Not Found</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+
+Error code 400 happens when the api call went
+through but request parameters was not right
+
+<details>
+ <summary><b>400 Bad Request</b> - Sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
+### PUT /api/Workouts/assignSets
+Assign sets to a workout.
+
+**Parameters**
+
+|       Name | Required |  Type      | Description                                   |
+|-----------:|:--------:|:----------:|-----------------------------------------------|
+|       `id` | required |   int      | Workout ID.                                   |
+| `Set ID's` | required | List of int| List of Set IDs to add to workout.            |
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+### PUT /api/Workouts/assignSetsByExercise
+Assign sets to a workout by exercise id's
+
+**Parameters**
+
+|            Name | Required |  Type      | Description             |
+|----------------:|:--------:|:----------:|-------------------------|
+|            `id` | required |   int      | Workout ID.             |
+| `Exercise ID's` | required | List of int| List of Exercise IDs.   |
+
+200 Success means that the API call was successful
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
 
 ---
 
@@ -1242,4 +1430,32 @@ Deletes a profile from the database
 |               `id` | required |   int   | Profile ID. <br/><br/> Supported values: `profileId` |
 
 Gives no response
+
+### DELETE /api/Workouts/delete
+Delete a workout from the database.
+
+**Parameters**
+
+|               Name | Required |  Type   | Description                                          |
+|-------------------:|:--------:|:-------:|------------------------------------------------------|
+|               `id` | required |   int   | Workout ID.                                          |
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
+
+### DELETE /api/Set/delete
+Delete a set from the database.
+
+**Parameters**
+
+|               Name | Required |  Type   | Description                                          |
+|-------------------:|:--------:|:-------:|------------------------------------------------------|
+|               `id` | required |   int   | Set ID.                                              |
+ 
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+ No content
+</details>
 
