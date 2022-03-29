@@ -546,41 +546,29 @@ Get a workout with associated goals, sets and programs
 
 ___
 
-### POST /api/Addresses
-Adds a new user to the database
-
-**Parameters**
-
-|      Name | Required |  Type   | Description                                                |
-|----------:|:--------:|:-------:|------------------------------------------------------------|
-| `address` | required | Address | User object to add. <br/><br/> Supported values: `address` |
-
-<details>
- <summary>Response</summary>
-
-```
-{
-  "addressLine1": "Johns Road 2B",
-  "addressLine2": null,
-  "addressLine3": null,
-  "postalCode": "7018",
-  "city": "Trondheim",
-  "country": null
-}
-```
-</details>
-
 ### POST /api/Exercise
 Adds a new exercise to the database
 
 **Parameters**
 
-|       Name | Required |   Type   | Description                                                     |
-|-----------:|:--------:|:--------:|-----------------------------------------------------------------|
-| `exercise` | required | Exercise | Exercise object to add. <br/><br/> Supported values: `exercise` |
+No parameters
+
+**Sample request body**
+
+```
+{
+  "name": "string",
+  "description": "string",
+  "targetMuscleGroup": "string",
+  "imageURL": "string",
+  "videoURL": "string"
+}
+```
 
 <details>
- <summary>Response</summary>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Exercise was successfully created 
 
 ```
 {
@@ -593,29 +581,78 @@ Adds a new exercise to the database
 ```
 </details>
 
-### POST /api/Goals
-Adds a new goal to the database
-
-**Parameters**
-
-|   Name | Required | Type | Description                                             |
-|-------:|:--------:|:----:|---------------------------------------------------------|
-| `goal` | required | Goal | Goal object to add. <br/><br/> Supported values: `goal` |
-
 <details>
- <summary>Response</summary>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
 
 ```
 {
-  "programEndDate": "2022-03-15T19:54:47.094Z",
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
+</details>
+
+### POST /api/Goals
+Adds a new goal to the database.
+
+**Parameters**
+
+No parameters
+
+**Sample request body**
+
+```
+{
+  "programEndDate": "2022-03-29T20:05:03.849Z",
+  "programId": 0,
+  "profileId": "string"
+}
+```
+
+<details>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Goal was successfully created 
+
+```
+{
+  "id": 0,
+  "programEndDate": "2022-03-29T20:05:03.853Z",
   "achieved": true,
   "programId": 0,
-  "workouts": [
-    0
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "completed": true
+    }
   ],
   "profileId": "string"
 }
 ```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
 </details>
 
 ### POST /api/Programs
@@ -623,111 +660,389 @@ Adds a new program to the database
 
 **Parameters**
 
-|      Name | Required |   Type    | Description                                                   |
-|----------:|:--------:|:---------:|---------------------------------------------------------------|
-| `program` | required | MFProgram | Program object to add. <br/><br/> Supported values: `program` |
+No parameters
 
-<details>
- <summary>Response</summary>
+**Sample request body**
 
 ```
 {
-  "name": "12-week strength building",
-  "category": "Strength"
+  "name": "string",
+  "category": "string"
 }
 ```
+
+<details>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Program was successfully created 
+
+```
+{
+  "id": 0,
+  "name": "string",
+  "category": "string",
+  "workouts": [
+    {
+      "id": 0,
+      "name": "string",
+      "type": "string",
+      "sets": [
+        {
+          "id": 0,
+          "exerciseRepetitions": 0,
+          "exerciseId": 0,
+          "exercise": {
+            "id": 0,
+            "name": "string",
+            "description": "string",
+            "targetMuscleGroup": "string",
+            "imageURL": "string",
+            "videoURL": "string"
+          },
+          "workouts": [
+            null
+          ]
+        }
+      ],
+      "programs": [
+        null
+      ],
+      "workoutGoals": [
+        {
+          "workoutId": 0,
+          "goalId": 0,
+          "goal": {
+            "id": 0,
+            "programEndDate": "2022-03-29T20:06:56.150Z",
+            "achieved": true,
+            "programId": 0,
+            "profileId": "string",
+            "profile": {
+              "id": "string",
+              "weight": 0,
+              "height": 0,
+              "medicalConditions": "string",
+              "disabilities": "string"
+            },
+            "workoutGoals": [
+              null
+            ]
+          },
+          "completed": true
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
 </details>
 
 ### POST /api/MFProgram/assignWorkouts
 Assigns a workout to a program to the database
 
-<details>
- <summary>Response</summary>
+**Parameters**
 
 |           Name | Required |  Type  | Description                                                            |
 |---------------:|:--------:|:------:|------------------------------------------------------------------------|
-|           `id` | required |  int   | Program ID. <br/><br/> Supported values: `programId`                   |
-|   `workoutIds` | required | int[]  | List of workout id's to add. <br/><br/> Supported values: `workoutIds` |
+|           `id` | required |  int   | Program ID.                                                            |
+
+**Sample request body**
+Should contain an array of workout IDs.
+
+```
+[
+  0
+]
+```
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+
+No content
 </details>
 
-Gives no response
 
 ### POST /api/Profile
-Adds a new profile to the database
+Adds a new profile to the database.
 
 **Parameters**
 
-|      Name | Required |  Type   | Description                                                   |
-|----------:|:--------:|:-------:|---------------------------------------------------------------|
-| `profile` | required | Profile | Profile object to add. <br/><br/> Supported values: `profile` |
+No parameters
+
+**Sample request body**
+
+```
+{
+  "id": "string",
+  "weight": 0,
+  "height": 0,
+  "medicalConditions": "string",
+  "disabilities": "string"
+}
+```
+
 
 <details>
- <summary>Response</summary>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Profile was successfully created 
 
 ```
 {
   "weight": 0,
   "height": 0,
-  "workoutId": 0,
-  "setId": 0,
   "medicalConditions": "string",
   "disabilities": "string"
 }
 ```
 </details>
 
-### POST /api/Set
-Adds a new set to the database
-
-**Parameters**
-
-|  Name | Required | Type | Description                                           |
-|------:|:--------:|:----:|-------------------------------------------------------|
-| `set` | required | Set  | Set object to add. <br/><br/> Supported values: `set` |
-
 <details>
- <summary>Response</summary>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
 
 ```
 {
-  "exerciseRepetitions": 12,
-  "exerciseId": 1
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
 }
 ```
+
+</details>
+
+### POST /api/Set
+Adds a new set to the database.
+
+**Parameters**
+
+No parameters
+
+**Sample request body**
+
+```
+{
+  "exerciseRepetitions": 0,
+  "exerciseId": 0
+}
+```
+
+<details>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Set was successfully created 
+
+```
+{
+  "id": 0,
+  "exerciseRepetitions": 0,
+  "exerciseId": 0,
+  "exercise": {
+    "id": 0,
+    "name": "string",
+    "description": "string",
+    "targetMuscleGroup": "string",
+    "imageURL": "string",
+    "videoURL": "string"
+  },
+  "workouts": [
+    {
+      "id": 0,
+      "name": "string",
+      "type": "string",
+      "sets": [
+        null
+      ],
+      "programs": [
+        {
+          "id": 0,
+          "name": "string",
+          "category": "string",
+          "workouts": [
+            null
+          ]
+        }
+      ],
+      "workoutGoals": [
+        {
+          "workoutId": 0,
+          "goalId": 0,
+          "goal": {
+            "id": 0,
+            "programEndDate": "2022-03-29T20:19:58.383Z",
+            "achieved": true,
+            "programId": 0,
+            "program": {
+              "id": 0,
+              "name": "string",
+              "category": "string",
+              "workouts": [
+                null
+              ]
+            },
+            "profileId": "string",
+            "profile": {
+              "id": "string",
+              "weight": 0,
+              "height": 0,
+              "medicalConditions": "string",
+              "disabilities": "string"
+            },
+            "workoutGoals": [
+              null
+            ]
+          },
+          "completed": true
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+
 </details>
 
 ### POST /api/Workouts
-Adds a new workout to the database
+Adds a new workout to the database, and does not assign any sets to it.
 
 **Parameters**
 
-|      Name | Required |  Type   | Description                                                   |
-|----------:|:--------:|:-------:|---------------------------------------------------------------|
-| `workout` | required | Workout | Workout object to add. <br/><br/> Supported values: `workout` |
+No parameters
 
-<details>
- <summary>Response</summary>
+**Sample request body**
 
 ```
 {
-  "exerciseRepetitions": 12,
-  "exerciseId": 1
+  "name": "string",
+  "type": "string"
+}
+```
+
+<details>
+ <summary><b>201 Created</b> - sample response</summary>
+
+Workout was successfully created
+
+```
+{
+  "id": 0,
+  "name": "string",
+  "type": "string",
+  "sets": [
+    {
+      "id": 0,
+      "exerciseRepetitions": 0,
+      "exerciseId": 0,
+      "exercise": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "targetMuscleGroup": "string",
+        "imageURL": "string",
+        "videoURL": "string"
+      },
+      "workouts": [
+        null
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "id": 0,
+      "name": "string",
+      "category": "string",
+      "workouts": [
+        null
+      ]
+    }
+  ],
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "goal": {
+        "id": 0,
+        "programEndDate": "2022-03-29T20:24:53.743Z",
+        "achieved": true,
+        "programId": 0,
+        "program": {
+          "id": 0,
+          "name": "string",
+          "category": "string",
+          "workouts": [
+            null
+          ]
+        },
+        "profileId": "string",
+        "profile": {
+          "id": "string",
+          "weight": 0,
+          "height": 0,
+          "medicalConditions": "string",
+          "disabilities": "string"
+        },
+        "workoutGoals": [
+          null
+        ]
+      },
+      "completed": true
+    }
+  ]
 }
 ```
 </details>
 
-### POST /api/Workouts/assignSets
-Assigns one or more sets to a workout to the database
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+ 
+ Could happen if the request body has the incorrect format.
 
-**Parameters**
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
 
-|     Name | Required |  Type  | Description                                             |
-|---------:|:--------:|:------:|---------------------------------------------------------|
-|     `id` | required |  int   | Workout ID. <br/><br/> Supported values: `setId`        |
-| `setIds` | required | int[]  | List of set Id's. <br/><br/> Supported values: `setIds` |
-
-Gives no response
-___
+</details>
 
 ### PUT /api/Exercises
 Edits an exercise in the database
@@ -831,27 +1146,35 @@ Gives no response
 ---
 
 
-### DELETE /api/Addresses/delete
-Deletes an address from the database
-
-**Parameters**
-
-|               Name | Required |  Type   | Description                                          |
-|-------------------:|:--------:|:-------:|------------------------------------------------------|
-|               `id` | required |   int   | Address ID. <br/><br/> Supported values: `addressId` |
-
-Gives no response
-
 ### DELETE /api/Exercises/delete
-Deletes an exercise from the database
+Deletes an exercise from the database.
 
 **Parameters**
 
 |               Name | Required |  Type   | Description                                            |
 |-------------------:|:--------:|:-------:|--------------------------------------------------------|
-|               `id` | required |   int   | Exercise ID. <br/><br/> Supported values: `exerciseId` |
+|               `id` | required |   int   | Exercise ID.                                           |
 
-Gives no response
+
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+
+No content
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
 
 ### DELETE /api/Goals/delete
 Deletes a goal from the database
@@ -860,9 +1183,43 @@ Deletes a goal from the database
 
 |               Name | Required |  Type   | Description                                    |
 |-------------------:|:--------:|:-------:|------------------------------------------------|
-|               `id` | required |   int   | Goal ID. <br/><br/> Supported values: `goalId` |
+|               `id` | required |   int   | Goal ID.                                       |
 
-Gives no response
+<details>
+ <summary><b>200 Success</b> - sample response</summary>
+
+No content
+</details>
+
+<details>
+ <summary><b>404 Not Found</b> - sample response</summary>
+
+ Could happen if the goal does not exist in the database
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
+
+<details>
+ <summary><b>400 Bad Request</b> - sample response</summary>
+
+```
+{
+  "type": "string",
+  "title": "string",
+  "status": 0,
+  "detail": "string",
+  "instance": "string"
+}
+```
+</details>
 
 ### DELETE /api/MFProgram/delete
 Deletes a program from the database
