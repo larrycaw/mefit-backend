@@ -6,13 +6,13 @@ This repository contains the backend of the application, which is an ASP.NET Web
 
 For database creation we are using Entity Framework Core. ERD which the database is based on can be found here. ***TODO ADD LINK***
 
-API documentation can be found later in this Readme. Additonally, when running this project in development mode, Swagger documentation can be viewed.
+API documentation can be found later in this Readme. Additionally, when running this project in development mode, Swagger documentation can be viewed.
 
 ##### Table of Contents  
 [[_TOC_]]
 
 ## Deployment
-Deployed to Azure with continous deployment. Requests requires valid token from our deployed Keycloak instance.
+Deployed to Azure with continuous deployment. Requests require a valid token from our deployed Keycloak instance.
 
 [MeFit Azure API](https://mefit.azurewebsites.net/)
 
@@ -73,97 +73,22 @@ Andrea Hårseth Nakstad [@andreahn](https://gitlab.com/anakstad)
 
 These endpoints allow you to handle communication with MeFit database deployed on azure
 
-### GET /api/Addresses/all
-Get basic address data for the all users
-
-<details>
- <summary>Sample response</summary>
-
-```
-[
-  {
-    "addressLine1": "string",
-    "addressLine2": "string",
-    "addressLine3": "string",
-    "postalCode": "string",
-    "city": "string",
-    "country": "string"
-  },
-  {
-    "addressLine1": "string",
-    "addressLine2": "string",
-    "addressLine3": "string",
-    "postalCode": "string",
-    "city": "string",
-    "country": "string"
-  }
-]
-```
-
-</details>
-
-### GET /api/Addresses
-Get basic address data for a single user
-
-**Parameters**
-
-| Name | Required | Type | Description                                           |
-|-----:|:--------:|:----:|-------------------------------------------------------|
-| `id` | required | int  | Address ID. <br/><br/> Supported values: `addressId`. |
-
-<details>
- <summary>Sample response</summary>
-
-```
-[
-  {
-    "addressLine1": "string",
-    "addressLine2": "string",
-    "addressLine3": "string",
-    "postalCode": "string",
-    "city": "string",
-    "country": "string"
-  }
-]
-```
-</details>
-
 ### GET /api/Exercises/all
 Get all exercise data
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
- [
-   {
-     "name": "Barbell curl",
-     "description": "Biceps strong",
-     "targetMuscleGroup": "biceps",
-     "imageURL": "img",
-     "videoURL": ".mov"
-   },
-   {
-     "name": "Leg press",
-     "description": "Legs strong",
-     "targetMuscleGroup": "legs",
-     "imageURL": "img",
-     "videoURL": ".mov"
-   },
-   {
-     "name": "Push up",
-     "description": "Chest strong",
-     "targetMuscleGroup": "upper body",
-     "imageURL": "img",
-     "videoURL": ".mov"
-   },
-   {
-     "name": "Isolation curl",
-     "description": "Biceps strong",
-     "targetMuscleGroup": "biceps",
-     "imageURL": "img",
-     "videoURL": ".mov"
-   }
- ]
+[
+  {
+    "id": 0,
+    "name": "string",
+    "description": "string",
+    "targetMuscleGroup": "string",
+    "imageURL": "string",
+    "videoURL": "string"
+  }
+]
 ```
 </details>
 
@@ -178,60 +103,42 @@ Get basic exercise data
 
 
 <details>
- <summary>Sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
- {
-   "name": "Barbell curl",
-   "description": "Biceps strong",
-   "targetMuscleGroup": "biceps",
-   "imageURL": "img",
-   "videoURL": ".mov"
- }
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "targetMuscleGroup": "string",
+  "imageURL": "string",
+  "videoURL": "string"
+}
 ```
 </details>
 
 ### GET /api/Goals/all
 Get all goals with associated program and workouts
 <details>
- <summary>Sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
- [
-   {
-     "programEndDate": "2022-03-14T13:34:40.1503317",
-     "achieved": true,
-     "programId": 2,
-     "workouts": [
-       2
-     ],
-     "profileId": "keycloak-uid"
-   },
-   {
-     "programEndDate": "2022-03-14T13:34:40.1503372",
-     "achieved": true,
-     "programId": 2,
-     "workouts": [],
-     "profileId": "keycloak-uid"
-   },
-   {
-     "programEndDate": "2022-03-14T14:32:00.127",
-     "achieved": true,
-     "programId": 3,
-     "workouts": [
-       2,
-       3
-     ],
-     "profileId": "keycloak-uid"
-   },
-   {
-     "programEndDate": "2022-03-14T14:09:35.292",
-     "achieved": false,
-     "programId": 1,
-     "workouts": [],
-     "profileId": "keycloak-uid"
-   }
- ]
+[
+  {
+    "id": 0,
+    "programEndDate": "2022-03-29T19:29:46.680Z",
+    "achieved": true,
+    "programId": 0,
+    "workoutGoals": [
+      {
+        "workoutId": 0,
+        "goalId": 0,
+        "completed": true
+      }
+    ],
+    "profileId": "string"
+  }
+]
 ```
 </details>
 
@@ -245,18 +152,23 @@ Get a goal with associated program and workouts
 |          `id` | required | int  | Goal ID. <br/><br/> Supported values: `goalId`. |
 
 <details>
- <summary>Sample response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
- {
-  "programEndDate": "2022-03-14T13:34:40.1503317",
+{
+  "id": 0,
+  "programEndDate": "2022-03-28T08:04:41.396Z",
   "achieved": true,
-  "programId": 2,
-  "workouts": [
-    2
+  "programId": 0,
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "completed": true
+    }
   ],
-  "profileId": "keycloak-uid"
- }
+  "profileId": "string"
+}
 ```
 </details>
 
@@ -271,15 +183,23 @@ Get a users goals
 
 
 <details>
- <summary>Response</summary>
+ <summary><b>200 Success</b> - Sample response</summary>
 
 ```
-{
-  "programEndDate": "2022-03-14T14:09:35.292",
-  "achieved": false,
-  "programId": 1,
-  "workouts": []
-}
+[
+  {
+    "programEndDate": "2022-03-28T08:05:01.890Z",
+    "achieved": true,
+    "programId": 0,
+    "workoutGoals": [
+      {
+        "workoutId": 0,
+        "goalId": 0,
+        "completed": true
+      }
+    ]
+  }
+]
 ```
 </details>
 
@@ -297,11 +217,51 @@ Get a users current goal
 
 ```
 {
-  "programEndDate": "2022-03-14T14:09:35.292",
-  "achieved": false,
-  "programId": 1,
-  "workouts": []
+  "programEndDate": "2022-03-28T08:05:35.902Z",
+  "achieved": true,
+  "programId": 0,
+  "workoutGoals": [
+    {
+      "workoutId": 0,
+      "goalId": 0,
+      "completed": true
+    }
+  ]
 }
+```
+</details>
+
+### GET /api/GoalWorkout/all
+Get all workouts associated with goals -- here todo - update response
+
+<details>
+ <summary>Response</summary>
+
+```
+[
+  {
+    "name": "Bicep enhancement",
+    "category": "Upper body",
+    "workouts": [
+      1
+    ]
+  },
+  {
+    "name": "Strength building",
+    "category": "Whole body",
+    "workouts": [
+      1,
+      2
+    ]
+  },
+  {
+    "name": "Cardio",
+    "category": "Whole body",
+    "workouts": [
+      3
+    ]
+  }
+]
 ```
 </details>
 
