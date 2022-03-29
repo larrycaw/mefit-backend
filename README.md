@@ -1165,7 +1165,7 @@ Deletes a goal from the database
 
 |               Name | Required |  Type   | Description                                    |
 |-------------------:|:--------:|:-------:|------------------------------------------------|
-|               `id` | required |   int   | Goal ID. <br/><br/> Supported values: `goalId` |
+|               `id` | required |   int   | Goal ID.                                       |
 
 <details>
  <summary><b>200 Success</b> - sample response</summary>
